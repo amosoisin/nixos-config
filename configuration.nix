@@ -15,15 +15,37 @@
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   environment.systemPackages = with pkgs;[
+    neovim
+    zsh
     wget
     vim
     git 
     gh
+    eza
+    ripgrep
   ];
 
-  wsl.enable = true;
-  wsl.defaultUser = "nixos";
+  wsl = {
+    enable = true;
+    defaultUser = "nixos";
+    useWindowsDriver = true;
 
+    interop = {
+      register = true;
+      includePath = true;
+    };
+  };
+
+  programs.zsh = {
+    enable = true;
+    ohMyZsh.enable = true;
+  };
+
+  users.users.dev = {
+    isNormalUser = true;
+    extraGroups = [ "docker" ];
+    shell = pkgs.zsh;
+  };
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
   # on your system were taken. It's perfectly fine and recommended to leave
