@@ -14,6 +14,16 @@
 #  ];
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
+  # タイムゾーン設定
+  time.timeZone = "Asia/Tokyo";
+
+  # ロケール設定
+  i18n.defaultLocale = "ja_JP.UTF-8";
+
+  # Docker有効化
+  virtualisation.docker.enable = true;
+
   environment.systemPackages = with pkgs;[
     zsh  # ログインシェルとしてシステムレベルで必要
     git  # システムレベルで必要
