@@ -1,3 +1,89 @@
 # 概要
+
 この環境はNixOSやnixが使用可能な環境ではありません。
 しかし、外部のNixOS-WSL環境用にNixOSの設定を行います。
+
+## プロジェクト構成
+
+```
+nixos-config/
+├── flake.nix             # Flakesメイン設定（入力・出力定義）
+├── flake.lock            # 依存関係ロックファイル
+├── configuration.nix     # NixOSシステムレベル設定
+├── home.nix              # home-manager（ユーザー環境）設定
+└── config/zsh/           # Zshカスタム設定ファイル
+```
+
+## ファイルの役割
+
+### flake.nix
+- **入力**: nixpkgs, home-manager, nixos-wsl（すべてrelease-25.05）
+- **出力**: `nixosConfigurations.nixos`（x86_64-linux）
+- モジュール構成を定義
+
+### configuration.nix
+- システムレベルの設定（タイムゾーン、ロケール、Docker等）
+- WSL固有の設定（Windows相互運用性）
+- ユーザー定義（nixosユーザー、グループ設定）
+- Nix実験的機能の有効化（flakes, nix-command）
+
+### home.nix
+- ユーザー環境のパッケージ管理
+- プログラム設定（Git, fzf, zoxide, bat, eza, tmux, Zsh）
+- 環境変数（EDITOR, VISUAL, LANG）
+- oh-my-zshとプラグインの設定
+
+### config/zsh/
+- `aliases.zsh`: コマンドエイリアス（Git, Docker, NixOS, ツール置換）
+- `env.zsh`: PATH設定（Cargo, Go, ~/.local/bin）、rustup初期化
+- `functions.zsh`: カスタムシェル関数（mkcd, extract）
+- `p10k.zsh`: Powerlevel10kプロンプト設定
+- `my-config.plugin.zsh`: 上記ファイルの統合エントリーポイント
+
+## 編集時の注意事項
+
+### Nix構文
+- 属性セットは`{ key = value; }`形式（セミコロン必須）
+- リストは`[ item1 item2 ]`形式
+- 文字列は`"string"`または`''multi-line''`
+- パス参照は`./relative/path`
+
+### 設定変更時の確認事項
+1. **flake.nix**: 入力の追加・変更時は`nix flake update`が必要
+2. **configuration.nix**: システム設定変更後は`sudo nixos-rebuild switch`
+3. **home.nix**: パッケージ追加時は`pkgs.パッケージ名`形式を使用
+4. **config/zsh/**: シェル設定は次回ログイン時または`source ~/.zshrc`で反映
+
+### パッケージ検索
+パッケージ名を調べるには：
+- [search.nixos.org](https://search.nixos.org/packages)
+- `nix search nixpkgs パッケージ名`
+
+## 主要設定値
+
+| 項目 | 値 |
+|------|-----|
+| ユーザー名 | nixos |
+| ホームディレクトリ | /home/nixos |
+| シェル | Zsh |
+| エディタ | Neovim |
+| タイムゾーン | Asia/Tokyo |
+| ロケール | ja_JP.UTF-8 |
+| State version | 25.05 |
+
+## コマンドリファレンス
+
+### NixOS管理（エイリアス）
+```bash
+nrs   # sudo nixos-rebuild switch --flake .  （設定適用）
+nrt   # sudo nixos-rebuild test --flake .    （テスト）
+nrb   # sudo nixos-rebuild boot --flake .    （次回起動時反映）
+nfu   # nix flake update                      （Flakes更新）
+nse   # nix search nixpkgs                    （パッケージ検索）
+```
+
+### 開発関連
+```bash
+lg    # lazygit（Git TUI）
+v     # nvim（Neovim起動）
+```
