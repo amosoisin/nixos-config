@@ -7,6 +7,13 @@
   home.packages = with pkgs; [
     nnn
     cowsay
+    # configuration.nixから移動
+    neovim
+    wget
+    vim
+    gh
+    eza
+    ripgrep
   ];
 
   home.stateVersion = "25.05";
@@ -20,7 +27,7 @@
 
     oh-my-zsh = {
       enable = true;
-      plugins = [ "git" "docker" "kubectl" ];
+      plugins = [ "git" "docker" ];
     };
 
     plugins = [

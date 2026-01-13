@@ -15,14 +15,8 @@
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   environment.systemPackages = with pkgs;[
-    neovim
-    zsh
-    wget
-    vim
-    git 
-    gh
-    eza
-    ripgrep
+    zsh  # ログインシェルとしてシステムレベルで必要
+    git  # システムレベルで必要
   ];
 
   wsl = {
@@ -38,7 +32,7 @@
 
   programs.zsh = {
     enable = true;
-    ohMyZsh.enable = true;
+    # ohMyZsh設定はhome.nixのhome-managerで管理
   };
 
   users.users.nixos = {
