@@ -29,11 +29,11 @@
         src = pkgs.zsh-powerlevel10k;
         file = "share/zsh-powerlevel10k/powerlevel10k.zsh-theme";
       }
+      {
+        name = "my-config";
+        src = ./config/zsh;
+        file = "my-config.plugin.zsh";
+      }
     ];
-
-    initExtra = ''
-      # Powerlevel10k設定ファイルの読み込み
-      [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
-    '';
   };
 }
