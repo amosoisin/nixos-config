@@ -108,6 +108,7 @@
   programs.fzf = {
     enable = true;
     enableZshIntegration = true;
+    defaultOptions = [ "--tmux" ];
   };
 
   # ===== zoxide設定 =====
