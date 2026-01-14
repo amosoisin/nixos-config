@@ -87,3 +87,6 @@ nse   # nix search nixpkgs                    （パッケージ検索）
 lg    # lazygit（Git TUI）
 v     # nvim（Neovim起動）
 ```
+
+# 注意事項
+ソースコードの変更を実施した場合は、ドキュメント@CLAUDE.md、@README.mdも変更すること
