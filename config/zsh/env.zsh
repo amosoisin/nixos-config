@@ -3,7 +3,6 @@
 
 # Rust/Cargo
 export PATH="$HOME/.cargo/bin:$PATH"
-# 注意: rustup の初期化（stable、rust-analyzer）は home.nix の home.activation で実行
 
 # Go
 export GOPATH="$HOME/go"
