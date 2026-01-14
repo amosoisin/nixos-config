@@ -12,6 +12,8 @@ nixos-config/
 ├── configuration.nix     # NixOSシステムレベル設定
 ├── home.nix              # home-manager（ユーザー環境）設定
 ├── .gitignore            # Git除外設定
+├── claude/               # Claude Code関連設定
+│   └── claude.nix        # Claudeモジュール設定（nixpkgs-unstableから最新版をインストール）
 ├── git/                  # Git関連設定
 │   └── git.nix           # Gitモジュール設定（エイリアス、グローバルignore等）
 ├── zsh/                  # Zsh関連設定
@@ -27,9 +29,10 @@ nixos-config/
 ## ファイルの役割
 
 ### flake.nix
-- **入力**: nixpkgs, home-manager, nixos-wsl（すべてrelease-25.05）、nvim-config（GitHub）
+- **入力**: nixpkgs, home-manager, nixos-wsl（すべてrelease-25.05）、nixpkgs-unstable（最新パッケージ用）、nvim-config（GitHub）
 - **出力**: `nixosConfigurations.nixos`（x86_64-linux）
 - モジュール構成を定義
+- `pkgs-unstable`を定義し、最新パッケージが必要なモジュールに渡す
 
 ### configuration.nix
 - システムレベルの設定（タイムゾーン、ロケール、Docker等）
@@ -58,6 +61,11 @@ nixos-config/
 - `neovim.nix`: Neovimモジュール設定（LSPサーバー、エイリアス、Python3サポート等）
 - Neovim設定ファイルはGitHub（amosoisin/nvim.lua）から取得し、`~/.config/nvim`に配置
 
+### claude/
+- `claude.nix`: Claude Codeモジュール設定
+- nixpkgs-unstableから最新のclaude-codeをインストール
+- 安定版nixpkgsでは古いバージョンになるため、unstableを使用
+
 ## 編集時の注意事項
 
 ### Nix構文
@@ -74,6 +82,7 @@ nixos-config/
 5. **zsh/**: Zsh設定変更後は`sudo nixos-rebuild switch`で反映
 6. **tmux/**: tmux設定変更後は`sudo nixos-rebuild switch`で反映
 7. **neovim/**: Neovim設定変更後は`sudo nixos-rebuild switch`で反映
+8. **claude/**: Claude設定変更後は`sudo nixos-rebuild switch`で反映
 
 ### パッケージ検索
 パッケージ名を調べるには：

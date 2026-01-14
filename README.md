@@ -19,6 +19,8 @@ nixos-config/
 ├── flake.lock            # 依存関係ロックファイル
 ├── configuration.nix     # NixOSシステム設定
 ├── home.nix              # home-manager設定（ユーザー環境）
+├── claude/               # Claude Code関連設定
+│   └── claude.nix        # Claudeモジュール設定
 ├── git/                  # Git関連設定
 │   └── git.nix           # Gitモジュール設定
 ├── zsh/                  # Zsh関連設定
@@ -122,6 +124,11 @@ sudo nixos-rebuild switch --flake .
 - **Python3サポート**: 有効（pynvim統合）
 - **LSPサーバー**: clangd, pyright, bash-language-server, lua-language-server, typescript-language-server等
 
+### Claude Code設定
+
+- **インストール元**: nixpkgs-unstable（常に最新バージョンを取得）
+- **設定ファイル**: `claude/claude.nix`
+
 ## よく使うコマンド
 
 ```bash
@@ -143,6 +150,7 @@ nse   # nix search nixpkgs
 | コンポーネント | ブランチ/リポジトリ |
 |--------------|---------|
 | nixpkgs | nixos-25.05 |
+| nixpkgs-unstable | nixos-unstable（最新パッケージ用） |
 | home-manager | release-25.05 |
 | NixOS-WSL | release-25.05 |
 | nvim-config | github:amosoisin/nvim.lua |

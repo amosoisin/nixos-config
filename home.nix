@@ -1,4 +1,4 @@
-{ config, pkgs, lib, inputs, ...}:
+{ config, pkgs, lib, inputs, pkgs-unstable, ...}:
 
 {
   imports = [
@@ -6,6 +6,7 @@
     ./tmux/tmux.nix
     ./git/git.nix
     (import ./neovim/neovim.nix { inherit config pkgs lib inputs; })
+    (import ./claude/claude.nix { inherit pkgs-unstable; })
   ];
 
   home.username = "nixos";
@@ -70,9 +71,6 @@
     # ===== その他 =====
     tmux
     squashfsTools
-
-    # ==== AI関連 =====
-    claude-code
   ];
 
   home.stateVersion = "25.05";
