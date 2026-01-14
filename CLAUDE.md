@@ -14,8 +14,10 @@ nixos-config/
 ├── zsh/                  # Zsh関連設定
 │   ├── zsh.nix           # Zshモジュール設定（プラグイン等）
 │   └── p10k.zsh          # Powerlevel10kプロンプト設定
-└── tmux/                 # tmux関連設定
-    └── tmux.nix          # tmuxモジュール設定（プラグイン等）
+├── tmux/                 # tmux関連設定
+│   └── tmux.nix          # tmuxモジュール設定（プラグイン等）
+└── neovim/               # Neovim関連設定
+    └── neovim.nix        # Neovimモジュール設定（LSP、エイリアス等）
 ```
 
 ## ファイルの役割
@@ -34,7 +36,7 @@ nixos-config/
 ### home.nix
 - ユーザー環境のパッケージ管理
 - プログラム設定（Git, fzf, zoxide, bat, eza）
-- 環境変数（EDITOR, VISUAL, LANG）
+- 環境変数（LANG）
 
 ### zsh/
 - `zsh.nix`: Zshモジュール設定（プラグイン管理、tmux自動起動）
@@ -42,6 +44,9 @@ nixos-config/
 
 ### tmux/
 - `tmux.nix`: tmuxモジュール設定（プラグイン、キーバインド等）
+
+### neovim/
+- `neovim.nix`: Neovimモジュール設定（LSPサーバー、エイリアス、Python3サポート等）
 
 ## 編集時の注意事項
 
@@ -57,6 +62,7 @@ nixos-config/
 3. **home.nix**: パッケージ追加時は`pkgs.パッケージ名`形式を使用
 4. **zsh/**: Zsh設定変更後は`sudo nixos-rebuild switch`で反映
 5. **tmux/**: tmux設定変更後は`sudo nixos-rebuild switch`で反映
+6. **neovim/**: Neovim設定変更後は`sudo nixos-rebuild switch`で反映
 
 ### パッケージ検索
 パッケージ名を調べるには：

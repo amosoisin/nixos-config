@@ -4,6 +4,7 @@
   imports = [
     ./zsh/zsh.nix
     ./tmux/tmux.nix
+    ./neovim/neovim.nix
   ];
 
   home.username = "nixos";
@@ -11,7 +12,6 @@
 
   home.packages = with pkgs; [
     # ===== エディタ =====
-    neovim
     vim
 
     # ===== ビルドツール =====
@@ -30,7 +30,6 @@
     nodejs_24
     python3
     python3Packages.pip
-    python3Packages.pynvim
     luarocks
 
     # ===== Rust（ツールチェーン） =====
@@ -47,20 +46,6 @@
     lazygit
     lazydocker
     fzf
-
-    # ===== LSPサーバー =====
-    clang-tools            # clangd
-    pyright
-    nodePackages.bash-language-server
-    lua-language-server
-    nodePackages.typescript-language-server
-    nodePackages.typescript
-    nodePackages.vim-language-server
-    docker-language-server
-    autotools-language-server
-
-    # ===== tree-sitter =====
-    tree-sitter
 
     # ===== CLI ユーティリティ =====
     curl
@@ -94,8 +79,6 @@
 
   # ===== 環境変数 =====
   home.sessionVariables = {
-    EDITOR = "nvim";
-    VISUAL = "nvim";
     LANG = "ja_JP.UTF-8";
   };
 

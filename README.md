@@ -22,8 +22,10 @@ nixos-config/
 ├── zsh/                  # Zsh関連設定
 │   ├── zsh.nix           # Zshモジュール設定（プラグイン等）
 │   └── p10k.zsh          # Powerlevel10k設定
-└── tmux/                 # tmux関連設定
-    └── tmux.nix          # tmuxモジュール設定
+├── tmux/                 # tmux関連設定
+│   └── tmux.nix          # tmuxモジュール設定
+└── neovim/               # Neovim関連設定
+    └── neovim.nix        # Neovimモジュール設定
 ```
 
 ## 前提条件
@@ -100,6 +102,13 @@ sudo nixos-rebuild switch --flake .
 - **ペイン移動**: `h,j,k,l`（Vimスタイル）
 - **プラグイン**: sensible, yank, resurrect, continuum
 
+### Neovim設定
+
+- **デフォルトエディタ**: 有効（EDITOR, VISUAL環境変数を自動設定）
+- **エイリアス**: vi, vim, vimdiff → nvim
+- **Python3サポート**: 有効（pynvim統合）
+- **LSPサーバー**: clangd, pyright, bash-language-server, lua-language-server, typescript-language-server等
+
 ## よく使うコマンド
 
 ```bash
@@ -150,6 +159,21 @@ plugins = [
     file = "share/zsh/plugins/plugin-name/plugin.zsh";
   }
 ];
+```
+
+### Neovim設定の変更
+
+`neovim/neovim.nix`でNeovimの設定を変更：
+
+```nix
+programs.neovim = {
+  enable = true;
+  # LSPサーバーを追加
+  extraPackages = with pkgs; [
+    # 既存のLSP...
+    your-lsp-server
+  ];
+};
 ```
 
 ## ライセンス
