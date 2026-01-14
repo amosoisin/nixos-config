@@ -19,6 +19,8 @@ nixos-config/
 ├── flake.lock            # 依存関係ロックファイル
 ├── configuration.nix     # NixOSシステム設定
 ├── home.nix              # home-manager設定（ユーザー環境）
+├── git/                  # Git関連設定
+│   └── git.nix           # Gitモジュール設定
 ├── zsh/                  # Zsh関連設定
 │   ├── zsh.nix           # Zshモジュール設定（プラグイン等）
 │   └── p10k.zsh          # Powerlevel10k設定
@@ -89,12 +91,20 @@ sudo nixos-rebuild switch --flake .
 | lazygit | Git TUI |
 | tmux | ターミナルマルチプレクサ |
 
+### Git設定
+
+- **ユーザー設定の自動生成**: 初回ログイン時に`~/.gitconfig-user`を対話的に作成
+- **プライバシー保護**: user.name/emailはリポジトリにコミットされない
+- **エディタ**: Neovim
+- **エイリアス**: `s`(status), `g`(log --graph), `difff`(diff --word-diff), `cm`(commit)
+
 ### Zsh設定
 
 - **テーマ**: Powerlevel10k（レインボーカラー）
 - **プラグイン管理**: oh-my-zsh
 - **主要プラグイン**: git, docker, fzf, zoxide, you-should-use, fzf-tab, forgit
-- **tmux自動起動**: ログイン時に`default`セッションを自動起動/アタッチ
+- **Gitユーザー設定**: 初回ログイン時に`~/.gitconfig-user`を自動生成
+- **tmux自動起動**: ログイン時に`dev`セッションを自動起動/アタッチ
 
 ### tmux設定
 

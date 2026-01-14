@@ -44,10 +44,11 @@ nixos-config/
 
 ### git/
 - `git.nix`: Gitモジュール設定（エイリアス、エディタ、グローバルignore等）
-- ユーザー固有の設定は`~/.gitconfig-user`でincludeされる
+- ユーザー固有の設定（name, email）は`~/.gitconfig-user`でincludeされる
+- `~/.gitconfig-user`は初回ログイン時に対話的に自動生成される
 
 ### zsh/
-- `zsh.nix`: Zshモジュール設定（プラグイン管理、tmux自動起動）
+- `zsh.nix`: Zshモジュール設定（プラグイン管理、Gitユーザー設定自動生成、tmux自動起動）
 - `p10k.zsh`: Powerlevel10kプロンプト設定
 
 ### tmux/

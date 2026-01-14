@@ -8,8 +8,26 @@
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
 
-    # ログイン時にtmuxを自動起動
+    # ログイン時の初期化
     initContent = ''
+      # Git ユーザー設定の自動生成（存在しない場合のみ）
+      if [ ! -f ~/.gitconfig-user ] && [ -t 0 ]; then
+          echo "Git ユーザー設定が見つかりません。設定を作成します。"
+          echo ""
+          printf "Git user.name を入力してください: "
+          read git_user_name
+          printf "Git user.email を入力してください: "
+          read git_user_email
+          cat > ~/.gitconfig-user << EOF
+      [user]
+          name = $git_user_name
+          email = $git_user_email
+      EOF
+          echo ""
+          echo "~/.gitconfig-user を作成しました。"
+          echo ""
+      fi
+
       # tmux自動起動（tmux内でない場合のみ）
       if command -v tmux &> /dev/null && [ -z "$TMUX" ] && [ -t 1 ]; then
           tmux new -A -s dev
