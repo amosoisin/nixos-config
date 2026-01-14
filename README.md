@@ -19,13 +19,9 @@ nixos-config/
 ├── flake.lock            # 依存関係ロックファイル
 ├── configuration.nix     # NixOSシステム設定
 ├── home.nix              # home-manager設定（ユーザー環境）
-└── config/               # カスタム設定ファイル
-    └── zsh/
-        ├── aliases.zsh          # エイリアス定義
-        ├── env.zsh              # 環境変数設定
-        ├── functions.zsh        # カスタム関数
-        ├── my-config.plugin.zsh # プラグインエントリーポイント
-        └── p10k.zsh             # Powerlevel10k設定
+└── zsh/                  # Zsh関連設定
+    ├── zsh.nix           # Zshモジュール設定（プラグイン等）
+    └── p10k.zsh          # Powerlevel10k設定
 ```
 
 ## 前提条件
@@ -138,20 +134,19 @@ home.packages = with pkgs; [
 ];
 ```
 
-### エイリアスの追加
+### Zshプラグインの追加
 
-`config/zsh/aliases.zsh`にエイリアスを追加：
+`zsh/zsh.nix`の`plugins`リストにプラグインを追加：
 
-```bash
-alias myalias='my-command'
-```
-
-### 環境変数の追加
-
-`config/zsh/env.zsh`に環境変数を追加：
-
-```bash
-export MY_VAR="value"
+```nix
+plugins = [
+  # 既存のプラグイン...
+  {
+    name = "plugin-name";
+    src = pkgs.zsh-plugin-name;
+    file = "share/zsh/plugins/plugin-name/plugin.zsh";
+  }
+];
 ```
 
 ## ライセンス

@@ -11,7 +11,9 @@ nixos-config/
 ├── flake.lock            # 依存関係ロックファイル
 ├── configuration.nix     # NixOSシステムレベル設定
 ├── home.nix              # home-manager（ユーザー環境）設定
-└── config/zsh/           # Zshカスタム設定ファイル
+└── zsh/                  # Zsh関連設定
+    ├── zsh.nix           # Zshモジュール設定（プラグイン等）
+    └── p10k.zsh          # Powerlevel10kプロンプト設定
 ```
 
 ## ファイルの役割
@@ -29,16 +31,12 @@ nixos-config/
 
 ### home.nix
 - ユーザー環境のパッケージ管理
-- プログラム設定（Git, fzf, zoxide, bat, eza, tmux, Zsh）
+- プログラム設定（Git, fzf, zoxide, bat, eza, tmux）
 - 環境変数（EDITOR, VISUAL, LANG）
-- oh-my-zshとプラグインの設定
 
-### config/zsh/
-- `aliases.zsh`: コマンドエイリアス（Git, Docker, NixOS, ツール置換）
-- `env.zsh`: PATH設定（Cargo, Go, ~/.local/bin）、rustup初期化
-- `functions.zsh`: カスタムシェル関数（mkcd, extract）
+### zsh/
+- `zsh.nix`: Zshモジュール設定（プラグイン管理）
 - `p10k.zsh`: Powerlevel10kプロンプト設定
-- `my-config.plugin.zsh`: 上記ファイルの統合エントリーポイント
 
 ## 編集時の注意事項
 
@@ -52,7 +50,7 @@ nixos-config/
 1. **flake.nix**: 入力の追加・変更時は`nix flake update`が必要
 2. **configuration.nix**: システム設定変更後は`sudo nixos-rebuild switch`
 3. **home.nix**: パッケージ追加時は`pkgs.パッケージ名`形式を使用
-4. **config/zsh/**: シェル設定は次回ログイン時または`source ~/.zshrc`で反映
+4. **zsh/**: Zsh設定変更後は`sudo nixos-rebuild switch`で反映
 
 ### パッケージ検索
 パッケージ名を調べるには：
