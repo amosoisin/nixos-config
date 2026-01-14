@@ -35,7 +35,7 @@ nixos-config/
 - 環境変数（EDITOR, VISUAL, LANG）
 
 ### zsh/
-- `zsh.nix`: Zshモジュール設定（プラグイン管理）
+- `zsh.nix`: Zshモジュール設定（プラグイン管理、tmux自動起動）
 - `p10k.zsh`: Powerlevel10kプロンプト設定
 
 ## 編集時の注意事項

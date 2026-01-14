@@ -89,6 +89,7 @@ sudo nixos-rebuild switch --flake .
 - **テーマ**: Powerlevel10k（レインボーカラー）
 - **プラグイン管理**: oh-my-zsh
 - **主要プラグイン**: git, docker, fzf, zoxide, you-should-use, fzf-tab, forgit
+- **tmux自動起動**: ログイン時に`default`セッションを自動起動/アタッチ
 
 ### tmux設定
 

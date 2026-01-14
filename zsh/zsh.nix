@@ -8,6 +8,15 @@
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
 
+    # ログイン時にtmuxを自動起動
+    initExtra = ''
+      # tmux自動起動（tmux内でない場合のみ）
+      if command -v tmux &> /dev/null && [ -z "$TMUX" ]; then
+        # 既存のセッションがあればアタッチ、なければ新規作成
+        tmux attach-session -t default || tmux new-session -s default
+      fi
+    '';
+
     plugins = [
       {
         name = "powerlevel10k";
