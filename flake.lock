@@ -89,11 +89,28 @@
         "type": "github"
       }
     },
+    "nvim-config": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1767792072,
+        "narHash": "sha256-DDsayh15D2xMtZSN4CiYfXCpi12vIEJ/Gz0g7/OD3cQ=",
+        "owner": "amosoisin",
+        "repo": "nvim.lua",
+        "rev": "be9848340743c444bb8c0c850cd7a915bd4aaf8e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "amosoisin",
+        "repo": "nvim.lua",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "home-manager": "home-manager",
         "nixos-wsl": "nixos-wsl",
-        "nixpkgs": "nixpkgs_2"
+        "nixpkgs": "nixpkgs_2",
+        "nvim-config": "nvim-config"
       }
     }
   },

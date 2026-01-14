@@ -25,6 +25,7 @@ nixos-config/
 ├── tmux/                 # tmux関連設定
 │   └── tmux.nix          # tmuxモジュール設定
 └── neovim/               # Neovim関連設定
+    ├── README.md         # Neovim設定の仕組み解説
     └── neovim.nix        # Neovimモジュール設定
 ```
 
