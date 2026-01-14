@@ -36,6 +36,10 @@
     defaultUser = "nixos";
     useWindowsDriver = true;
 
+    wslConf = {
+      automount.options = "metadata,umask=022,fmask=011";
+    };
+
     interop = {
       register = true;
       includePath = true;
