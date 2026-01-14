@@ -1,4 +1,4 @@
-{ config, pkgs, ...}:
+{ config, pkgs, lib, ...}:
 
 {
   imports = [
@@ -54,7 +54,7 @@
     nodePackages.typescript-language-server
     nodePackages.typescript
     nodePackages.vim-language-server
-    # rust-analyzer は rustup 経由で管理（env.zsh参照）
+    # rust-analyzer は rustup 経由で管理（home.activation参照）
 
     # ===== tree-sitter =====
     tree-sitter
@@ -87,6 +87,25 @@
 
   home.stateVersion = "25.05";
   programs.home-manager.enable = true;
+
+  # ===== Rustup初期化（ビルド時に実行） =====
+  home.activation = {
+    rustupSetup = lib.hm.dag.entryAfter ["writeBoundary"] ''
+      export PATH="${config.home.homeDirectory}/.cargo/bin:$PATH"
+      if command -v rustup &> /dev/null; then
+        # デフォルトツールチェーンが未設定の場合のみインストール
+        if ! rustup default 2>&1 | grep -q stable; then
+          echo "Rustup: デフォルトツールチェーンをインストール中..."
+          run rustup default stable
+        fi
+        # rust-analyzerがなければインストール
+        if ! rustup component list --installed 2>/dev/null | grep -q rust-analyzer; then
+          echo "Rustup: rust-analyzerをインストール中..."
+          run rustup component add rust-analyzer
+        fi
+      fi
+    '';
+  };
 
   # ===== 環境変数 =====
   home.sessionVariables = {

@@ -3,20 +3,7 @@
 
 # Rust/Cargo
 export PATH="$HOME/.cargo/bin:$PATH"
-
-# Rustup初期化（デフォルトツールチェーンとrust-analyzerのセットアップ）
-if command -v rustup &> /dev/null; then
-  # デフォルトツールチェーンが未設定の場合のみインストール
-  if ! rustup default 2>&1 | grep -q stable; then
-    echo "Rustup: デフォルトツールチェーンをインストール中..."
-    rustup default stable
-  fi
-  # rust-analyzerがなければインストール
-  if ! rustup component list --installed 2>/dev/null | grep -q rust-analyzer; then
-    echo "Rustup: rust-analyzerをインストール中..."
-    rustup component add rust-analyzer
-  fi
-fi
+# 注意: rustup の初期化（stable、rust-analyzer）は home.nix の home.activation で実行
 
 # Go
 export GOPATH="$HOME/go"
