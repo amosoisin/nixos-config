@@ -81,8 +81,6 @@
     # ===== その他 =====
     tmux
     squashfsTools
-    nnn
-    cowsay
   ];
 
   home.stateVersion = "25.05";
