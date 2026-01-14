@@ -1,6 +1,12 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
 {
+  # ===== Neovim設定ファイルをGitHubから配置 =====
+  home.file.".config/nvim" = {
+    source = inputs.nvim-config;
+    recursive = true;
+  };
+
   # ===== Neovim設定 =====
   programs.neovim = {
     enable = true;

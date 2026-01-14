@@ -1,10 +1,10 @@
-{ config, pkgs, lib, ...}:
+{ config, pkgs, lib, inputs, ...}:
 
 {
   imports = [
     ./zsh/zsh.nix
     ./tmux/tmux.nix
-    ./neovim/neovim.nix
+    (import ./neovim/neovim.nix { inherit config pkgs lib inputs; })
   ];
 
   home.username = "nixos";

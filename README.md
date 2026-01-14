@@ -104,6 +104,8 @@ sudo nixos-rebuild switch --flake .
 
 ### Neovim設定
 
+- **設定ファイル**: GitHubリポジトリ（amosoisin/nvim.lua）から取得し、`~/.config/nvim`に配置
+- **プラグイン管理**: lazy.nvim
 - **デフォルトエディタ**: 有効（EDITOR, VISUAL環境変数を自動設定）
 - **エイリアス**: vi, vim, vimdiff → nvim
 - **Python3サポート**: 有効（pynvim統合）
@@ -127,11 +129,12 @@ nse   # nix search nixpkgs
 
 ## 依存関係
 
-| コンポーネント | ブランチ |
+| コンポーネント | ブランチ/リポジトリ |
 |--------------|---------|
 | nixpkgs | nixos-25.05 |
 | home-manager | release-25.05 |
 | NixOS-WSL | release-25.05 |
+| nvim-config | github:amosoisin/nvim.lua |
 
 ## カスタマイズ
 
@@ -163,12 +166,23 @@ plugins = [
 
 ### Neovim設定の変更
 
-`neovim/neovim.nix`でNeovimの設定を変更：
+Neovim設定ファイルはGitHubリポジトリ（amosoisin/nvim.lua）から取得されます。
+
+設定を更新するには：
+
+```bash
+# flake.lockのnvim-configを最新に更新
+nix flake update nvim-config
+
+# 設定を適用
+nrs
+```
+
+LSPサーバーを追加する場合は`neovim/neovim.nix`を編集：
 
 ```nix
 programs.neovim = {
   enable = true;
-  # LSPサーバーを追加
   extraPackages = with pkgs; [
     # 既存のLSP...
     your-lsp-server

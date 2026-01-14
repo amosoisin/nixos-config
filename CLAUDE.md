@@ -23,7 +23,7 @@ nixos-config/
 ## ファイルの役割
 
 ### flake.nix
-- **入力**: nixpkgs, home-manager, nixos-wsl（すべてrelease-25.05）
+- **入力**: nixpkgs, home-manager, nixos-wsl（すべてrelease-25.05）、nvim-config（GitHub）
 - **出力**: `nixosConfigurations.nixos`（x86_64-linux）
 - モジュール構成を定義
 
@@ -47,6 +47,7 @@ nixos-config/
 
 ### neovim/
 - `neovim.nix`: Neovimモジュール設定（LSPサーバー、エイリアス、Python3サポート等）
+- Neovim設定ファイルはGitHub（amosoisin/nvim.lua）から取得し、`~/.config/nvim`に配置
 
 ## 編集時の注意事項
 

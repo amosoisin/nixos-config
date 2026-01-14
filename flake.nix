@@ -6,6 +6,12 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";
     home-manager.url = "github:nix-community/home-manager/release-25.05";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
+
+    # Neovim設定
+    nvim-config = {
+      url = "github:amosoisin/nvim.lua";
+      flake = false;
+    };
   };
 
   outputs = { self, nixpkgs, nixos-wsl, home-manager, ... }@inputs: {
@@ -26,6 +32,7 @@
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
+            home-manager.extraSpecialArgs = { inherit inputs; };
             home-manager.users.nixos = import ./home.nix;
           }
         ];
