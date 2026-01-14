@@ -11,9 +11,8 @@
     # ログイン時にtmuxを自動起動
     initContent = ''
       # tmux自動起動（tmux内でない場合のみ）
-      if command -v tmux &> /dev/null && [ -z "$TMUX" ]; then
-        # 既存のセッションがあればアタッチ、なければ新規作成
-        tmux attach-session -t default || tmux new-session -s default
+      if command -v tmux &> /dev/null && [ -z "$TMUX" ] && [ -t 1 ]; then
+          tmux new -A -s dev
       fi
     '';
 
