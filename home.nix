@@ -4,6 +4,7 @@
   imports = [
     ./zsh/zsh.nix
     ./tmux/tmux.nix
+    ./git/git.nix
     (import ./neovim/neovim.nix { inherit config pkgs lib inputs; })
   ];
 
@@ -80,11 +81,6 @@
   # ===== 環境変数 =====
   home.sessionVariables = {
     LANG = "ja_JP.UTF-8";
-  };
-
-  # ===== Git設定 =====
-  programs.git = {
-    enable = true;
   };
 
   # ===== fzf設定 =====

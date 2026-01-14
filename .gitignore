@@ -1,0 +1,21 @@
+# Nix build outputs
+result
+result-*
+
+# Editor
+*.swp
+*.swo
+*~
+
+# Environment
+.env
+.env.local
+.envrc
+.direnv/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Backup files
+*.bak

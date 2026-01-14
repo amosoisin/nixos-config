@@ -11,6 +11,9 @@ nixos-config/
 ├── flake.lock            # 依存関係ロックファイル
 ├── configuration.nix     # NixOSシステムレベル設定
 ├── home.nix              # home-manager（ユーザー環境）設定
+├── .gitignore            # Git除外設定
+├── git/                  # Git関連設定
+│   └── git.nix           # Gitモジュール設定（エイリアス、グローバルignore等）
 ├── zsh/                  # Zsh関連設定
 │   ├── zsh.nix           # Zshモジュール設定（プラグイン等）
 │   └── p10k.zsh          # Powerlevel10kプロンプト設定
@@ -36,8 +39,12 @@ nixos-config/
 
 ### home.nix
 - ユーザー環境のパッケージ管理
-- プログラム設定（Git, fzf, zoxide, bat, eza）
+- プログラム設定（fzf, zoxide, bat, eza）
 - 環境変数（LANG）
+
+### git/
+- `git.nix`: Gitモジュール設定（エイリアス、エディタ、グローバルignore等）
+- ユーザー固有の設定は`~/.gitconfig-user`でincludeされる
 
 ### zsh/
 - `zsh.nix`: Zshモジュール設定（プラグイン管理、tmux自動起動）
@@ -62,9 +69,10 @@ nixos-config/
 1. **flake.nix**: 入力の追加・変更時は`nix flake update`が必要
 2. **configuration.nix**: システム設定変更後は`sudo nixos-rebuild switch`
 3. **home.nix**: パッケージ追加時は`pkgs.パッケージ名`形式を使用
-4. **zsh/**: Zsh設定変更後は`sudo nixos-rebuild switch`で反映
-5. **tmux/**: tmux設定変更後は`sudo nixos-rebuild switch`で反映
-6. **neovim/**: Neovim設定変更後は`sudo nixos-rebuild switch`で反映
+4. **git/**: Git設定変更後は`sudo nixos-rebuild switch`で反映
+5. **zsh/**: Zsh設定変更後は`sudo nixos-rebuild switch`で反映
+6. **tmux/**: tmux設定変更後は`sudo nixos-rebuild switch`で反映
+7. **neovim/**: Neovim設定変更後は`sudo nixos-rebuild switch`で反映
 
 ### パッケージ検索
 パッケージ名を調べるには：
