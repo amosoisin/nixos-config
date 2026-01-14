@@ -19,9 +19,11 @@ nixos-config/
 ├── flake.lock            # 依存関係ロックファイル
 ├── configuration.nix     # NixOSシステム設定
 ├── home.nix              # home-manager設定（ユーザー環境）
-└── zsh/                  # Zsh関連設定
-    ├── zsh.nix           # Zshモジュール設定（プラグイン等）
-    └── p10k.zsh          # Powerlevel10k設定
+├── zsh/                  # Zsh関連設定
+│   ├── zsh.nix           # Zshモジュール設定（プラグイン等）
+│   └── p10k.zsh          # Powerlevel10k設定
+└── tmux/                 # tmux関連設定
+    └── tmux.nix          # tmuxモジュール設定
 ```
 
 ## 前提条件
