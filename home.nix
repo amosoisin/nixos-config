@@ -26,7 +26,7 @@
     # ===== コンパイラ・言語 =====
     gcc
     go
-    nodejs_22
+    nodejs_24
     python3
     python3Packages.pip
     python3Packages.pynvim
@@ -44,6 +44,7 @@
 
     # ===== Go製ツール =====
     lazygit
+    lazydocker
     fzf
 
     # ===== LSPサーバー =====
@@ -54,6 +55,8 @@
     nodePackages.typescript-language-server
     nodePackages.typescript
     nodePackages.vim-language-server
+    docker-language-server
+    autotools-language-server
 
     # ===== tree-sitter =====
     tree-sitter
@@ -80,6 +83,9 @@
     # ===== その他 =====
     tmux
     squashfsTools
+
+    # ==== AI関連 =====
+    claude-code
   ];
 
   home.stateVersion = "25.05";

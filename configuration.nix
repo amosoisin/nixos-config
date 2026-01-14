@@ -29,6 +29,8 @@
     git  # システムレベルで必要
   ];
 
+  nixpkgs.config.allowUnfree = true;
+
   wsl = {
     enable = true;
     defaultUser = "nixos";
