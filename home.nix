@@ -71,6 +71,8 @@
     # ===== その他 =====
     tmux
     squashfsTools
+
+    ghostty
   ];
 
   home.stateVersion = "25.05";
