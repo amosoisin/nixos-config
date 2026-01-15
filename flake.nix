@@ -10,7 +10,7 @@
 
     # Neovim設定（サブモジュール）
     nvim-config = {
-      url = "git+file:./neovim/nvim.lua";
+      url = "git+file:./modules/home/neovim/nvim.lua";
       flake = false;
     };
   };
@@ -27,21 +27,17 @@
       nixos = nixpkgs.lib.nixosSystem {
         inherit system;
         modules = [
-          ./configuration.nix
+          ./hosts/nixos-wsl/configuration.nix
 
           # wsl-setting
           nixos-wsl.nixosModules.default
-          {
-            system.stateVersion = "25.05";
-            wsl.enable = true;
-          }
 
           home-manager.nixosModules.home-manager
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
             home-manager.extraSpecialArgs = { inherit inputs pkgs-unstable; };
-            home-manager.users.nixos = import ./home.nix;
+            home-manager.users.nixos = import ./hosts/nixos-wsl/home.nix;
           }
         ];
       };

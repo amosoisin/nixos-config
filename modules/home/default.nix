@@ -2,12 +2,12 @@
 
 {
   imports = [
-    ./zsh/zsh.nix
-    ./tmux/tmux.nix
-    ./git/git.nix
-    ./ghostty/ghostty.nix
-    (import ./neovim/neovim.nix { inherit config pkgs lib inputs; })
-    (import ./claude/claude.nix { inherit pkgs-unstable; })
+    ./git
+    ./zsh
+    ./tmux
+    (import ./neovim { inherit config pkgs lib inputs; })
+    (import ./claude { inherit pkgs-unstable; })
+    ./ghostty
   ];
 
   home.username = "nixos";
