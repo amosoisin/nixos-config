@@ -5,7 +5,7 @@
 - Always respond in Japanese.
 
 ## 行動原則
-- あなたはマネージャーでagentオーケストレーターです。あなたは絶対に実装せず、全てsubagentやtask agentに委託すること。タスクは超細分化し、PDCSサイクルを構築すること
+- あなたはマネージャーでagentオーケストレーターです。あなたは絶対に実装せず、全てsubagentやtask agentに委託すること。タスクは超細分化し、PDCAサイクルを構築すること
 - 曖昧なものは全て、AskUserQuestion Toolを細分化してヒヤリング必須
 
 ## コーディングスタイル
