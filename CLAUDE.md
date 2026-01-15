@@ -1,14 +1,12 @@
 # 概要
 
-この環境はNixOSやnixが使用可能な環境ではありません。
-しかし、外部のNixOS-WSL環境用にNixOSの設定を行います。
-
 ## プロジェクト構成
 
 ```
 nixos-config/
 ├── flake.nix             # Flakesメイン設定（入力・出力定義）
 ├── flake.lock            # 依存関係ロックファイル
+├── .gitmodules           # Gitサブモジュール設定
 ├── configuration.nix     # NixOSシステムレベル設定
 ├── home.nix              # home-manager（ユーザー環境）設定
 ├── .gitignore            # Git除外設定
@@ -23,13 +21,14 @@ nixos-config/
 │   └── tmux.nix          # tmuxモジュール設定（プラグイン等）
 └── neovim/               # Neovim関連設定
     ├── README.md         # Neovim設定の仕組み解説（初心者向け）
-    └── neovim.nix        # Neovimモジュール設定（LSP、エイリアス等）
+    ├── neovim.nix        # Neovimモジュール設定（LSP、エイリアス等）
+    └── nvim.lua/         # Neovim設定ファイル（Gitサブモジュール、amosoisin/nvim.lua）
 ```
 
 ## ファイルの役割
 
 ### flake.nix
-- **入力**: nixpkgs, home-manager, nixos-wsl（すべてrelease-25.05）、nixpkgs-unstable（最新パッケージ用）、nvim-config（GitHub）
+- **入力**: nixpkgs, home-manager, nixos-wsl（すべてrelease-25.05）、nixpkgs-unstable（最新パッケージ用）、nvim-config（ローカルサブモジュール）
 - **出力**: `nixosConfigurations.nixos`（x86_64-linux）
 - モジュール構成を定義
 - `pkgs-unstable`を定義し、最新パッケージが必要なモジュールに渡す
@@ -59,7 +58,8 @@ nixos-config/
 
 ### neovim/
 - `neovim.nix`: Neovimモジュール設定（LSPサーバー、エイリアス、Python3サポート等）
-- Neovim設定ファイルはGitHub（amosoisin/nvim.lua）から取得し、`~/.config/nvim`に配置
+- `nvim.lua/`: Neovim設定ファイル（Gitサブモジュール、https://github.com/amosoisin/nvim.lua）
+- サブモジュールから`~/.config/nvim`に配置
 
 ### claude/
 - `claude.nix`: Claude Codeモジュール設定
@@ -83,6 +83,11 @@ nixos-config/
 6. **tmux/**: tmux設定変更後は`sudo nixos-rebuild switch`で反映
 7. **neovim/**: Neovim設定変更後は`sudo nixos-rebuild switch`で反映
 8. **claude/**: Claude設定変更後は`sudo nixos-rebuild switch`で反映
+
+### Gitサブモジュールの管理
+- **初回クローン時**: `git clone --recursive` または `git submodule update --init --recursive`
+- **サブモジュール更新**: `git submodule update --remote` でリモートの最新版を取得
+- **neovim/nvim.lua**: Neovim設定をサブモジュールとして管理（https://github.com/amosoisin/nvim.lua）
 
 ### パッケージ検索
 パッケージ名を調べるには：

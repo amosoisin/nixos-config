@@ -8,9 +8,9 @@
     home-manager.url = "github:nix-community/home-manager/release-25.05";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
-    # Neovim設定
+    # Neovim設定（サブモジュール）
     nvim-config = {
-      url = "github:amosoisin/nvim.lua";
+      url = "git+file:./neovim/nvim.lua";
       flake = false;
     };
   };

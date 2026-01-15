@@ -17,6 +17,7 @@ NixOS-WSL環境向けのNixOS設定リポジトリです。Nix Flakesとhome-man
 nixos-config/
 ├── flake.nix             # Flakesメイン設定
 ├── flake.lock            # 依存関係ロックファイル
+├── .gitmodules           # Gitサブモジュール設定
 ├── configuration.nix     # NixOSシステム設定
 ├── home.nix              # home-manager設定（ユーザー環境）
 ├── claude/               # Claude Code関連設定
@@ -30,7 +31,8 @@ nixos-config/
 │   └── tmux.nix          # tmuxモジュール設定
 └── neovim/               # Neovim関連設定
     ├── README.md         # Neovim設定の仕組み解説
-    └── neovim.nix        # Neovimモジュール設定
+    ├── neovim.nix        # Neovimモジュール設定
+    └── nvim.lua/         # Neovim設定ファイル（Gitサブモジュール）
 ```
 
 ## 前提条件
@@ -40,11 +42,17 @@ nixos-config/
 
 ## セットアップ
 
-1. NixOS-WSL環境にこのリポジトリをクローン：
+1. NixOS-WSL環境にこのリポジトリをクローン（サブモジュールも含む）：
 
 ```bash
-git clone <repository-url> ~/nixos-config
+git clone --recursive <repository-url> ~/nixos-config
 cd ~/nixos-config
+```
+
+または、既にクローンしている場合はサブモジュールを初期化：
+
+```bash
+git submodule update --init --recursive
 ```
 
 2. 設定を適用：
@@ -117,7 +125,7 @@ sudo nixos-rebuild switch --flake .
 
 ### Neovim設定
 
-- **設定ファイル**: GitHubリポジトリ（amosoisin/nvim.lua）から取得し、`~/.config/nvim`に配置
+- **設定ファイル**: Gitサブモジュール（neovim/nvim.lua、元リポジトリ：amosoisin/nvim.lua）から`~/.config/nvim`に配置
 - **プラグイン管理**: lazy.nvim
 - **デフォルトエディタ**: 有効（EDITOR, VISUAL環境変数を自動設定）
 - **エイリアス**: vi, vim, vimdiff → nvim
@@ -153,7 +161,7 @@ nse   # nix search nixpkgs
 | nixpkgs-unstable | nixos-unstable（最新パッケージ用） |
 | home-manager | release-25.05 |
 | NixOS-WSL | release-25.05 |
-| nvim-config | github:amosoisin/nvim.lua |
+| nvim-config | ローカルサブモジュール（元リポジトリ：github:amosoisin/nvim.lua） |
 
 ## カスタマイズ
 
@@ -185,19 +193,24 @@ plugins = [
 
 ### Neovim設定の変更
 
-Neovim設定ファイルはGitHubリポジトリ（amosoisin/nvim.lua）から取得されます。
+Neovim設定ファイルはGitサブモジュール（neovim/nvim.lua）として管理されています。
 
-設定を更新するには：
+**設定ファイル（nvim.lua）を更新するには**：
 
 ```bash
-# flake.lockのnvim-configを最新に更新
-nix flake update nvim-config
+# サブモジュールを最新版に更新
+cd neovim/nvim.lua
+git pull origin main
+cd ../..
+
+# または、リポジトリルートから
+git submodule update --remote neovim/nvim.lua
 
 # 設定を適用
 nrs
 ```
 
-LSPサーバーを追加する場合は`neovim/neovim.nix`を編集：
+**LSPサーバーを追加する場合**は`neovim/neovim.nix`を編集：
 
 ```nix
 programs.neovim = {
@@ -207,6 +220,19 @@ programs.neovim = {
     your-lsp-server
   ];
 };
+```
+
+**サブモジュールの管理**：
+```bash
+# サブモジュールの状態確認
+git submodule status
+
+# サブモジュールを特定のコミットに固定
+cd neovim/nvim.lua
+git checkout <commit-hash>
+cd ../..
+git add neovim/nvim.lua
+git commit -m "fix: pin nvim.lua to specific version"
 ```
 
 ## ライセンス
