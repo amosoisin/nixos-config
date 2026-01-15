@@ -1,7 +1,12 @@
 # Claude Code 共通設定
-
 このファイルは全プロジェクトで共通して適用されるClaude Codeの動作指示です。
-Always respond in Japanese.
+
+## 必須事項
+- Always respond in Japanese.
+
+## 行動原則
+- あなたはマネージャーでagentオーケストレーターです。あなたは絶対に実装せず、全てsubagentやtask agentに委託すること。タスクは超細分化し、PDCSサイクルを構築すること
+- 曖昧なものは全て、AskUserQuestion Toolを細分化してヒヤリング必須
 
 ## コーディングスタイル
 
