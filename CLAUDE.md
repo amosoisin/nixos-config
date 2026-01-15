@@ -12,6 +12,8 @@ nixos-config/
 ├── .gitignore            # Git除外設定
 ├── claude/               # Claude Code関連設定
 │   └── claude.nix        # Claudeモジュール設定（nixpkgs-unstableから最新版をインストール）
+├── ghostty/              # Ghostty（ターミナルエミュレータ）関連設定
+│   └── ghostty.nix       # Ghosttyモジュール設定
 ├── git/                  # Git関連設定
 │   └── git.nix           # Gitモジュール設定（エイリアス、グローバルignore等）
 ├── zsh/                  # Zsh関連設定
@@ -66,6 +68,11 @@ nixos-config/
 - nixpkgs-unstableから最新のclaude-codeをインストール
 - 安定版nixpkgsでは古いバージョンになるため、unstableを使用
 
+### ghostty/
+- `ghostty.nix`: Ghosttyモジュール設定
+- Ghosttyターミナルエミュレータをインストール
+- 必要に応じて設定ファイル（`~/.config/ghostty/config`）を配置可能
+
 ## 編集時の注意事項
 
 ### Nix構文
@@ -79,10 +86,11 @@ nixos-config/
 2. **configuration.nix**: システム設定変更後は`sudo nixos-rebuild switch`
 3. **home.nix**: パッケージ追加時は`pkgs.パッケージ名`形式を使用
 4. **git/**: Git設定変更後は`sudo nixos-rebuild switch`で反映
-5. **zsh/**: Zsh設定変更後は`sudo nixos-rebuild switch`で反映
-6. **tmux/**: tmux設定変更後は`sudo nixos-rebuild switch`で反映
-7. **neovim/**: Neovim設定変更後は`sudo nixos-rebuild switch`で反映
-8. **claude/**: Claude設定変更後は`sudo nixos-rebuild switch`で反映
+5. **ghostty/**: Ghostty設定変更後は`sudo nixos-rebuild switch`で反映
+6. **zsh/**: Zsh設定変更後は`sudo nixos-rebuild switch`で反映
+7. **tmux/**: tmux設定変更後は`sudo nixos-rebuild switch`で反映
+8. **neovim/**: Neovim設定変更後は`sudo nixos-rebuild switch`で反映
+9. **claude/**: Claude設定変更後は`sudo nixos-rebuild switch`で反映
 
 ### Gitサブモジュールの管理
 - **初回クローン時**: `git clone --recursive` または `git submodule update --init --recursive`

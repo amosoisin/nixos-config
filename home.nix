@@ -5,6 +5,7 @@
     ./zsh/zsh.nix
     ./tmux/tmux.nix
     ./git/git.nix
+    ./ghostty/ghostty.nix
     (import ./neovim/neovim.nix { inherit config pkgs lib inputs; })
     (import ./claude/claude.nix { inherit pkgs-unstable; })
   ];
@@ -71,8 +72,6 @@
     # ===== その他 =====
     tmux
     squashfsTools
-
-    ghostty
   ];
 
   home.stateVersion = "25.05";
