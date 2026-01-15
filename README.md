@@ -15,25 +15,44 @@ NixOS-WSL環境向けのNixOS設定リポジトリです。Nix Flakesとhome-man
 
 ```
 nixos-config/
-├── flake.nix             # Flakesメイン設定
-├── flake.lock            # 依存関係ロックファイル
-├── .gitmodules           # Gitサブモジュール設定
-├── configuration.nix     # NixOSシステム設定
-├── home.nix              # home-manager設定（ユーザー環境）
-├── claude/               # Claude Code関連設定
-│   └── claude.nix        # Claudeモジュール設定
-├── git/                  # Git関連設定
-│   └── git.nix           # Gitモジュール設定
-├── zsh/                  # Zsh関連設定
-│   ├── zsh.nix           # Zshモジュール設定（プラグイン等）
-│   └── p10k.zsh          # Powerlevel10k設定
-├── tmux/                 # tmux関連設定
-│   └── tmux.nix          # tmuxモジュール設定
-└── neovim/               # Neovim関連設定
-    ├── README.md         # Neovim設定の仕組み解説
-    ├── neovim.nix        # Neovimモジュール設定
-    └── nvim.lua/         # Neovim設定ファイル（Gitサブモジュール）
+├── flake.nix                         # Flakesメイン設定
+├── flake.lock                        # 依存関係ロックファイル
+├── .gitmodules                       # Gitサブモジュール設定
+├── README.md                         # このファイル
+├── CLAUDE.md                         # アーキテクチャ・設計判断
+│
+├── modules/                          # 再利用可能なモジュール
+│   ├── home/                         # home-manager共通設定（OS非依存）
+│   │   ├── default.nix              # 共通パッケージ・プログラム統合
+│   │   ├── git/default.nix          # Gitモジュール設定
+│   │   ├── zsh/                      # Zsh関連設定
+│   │   │   ├── default.nix          # Zshモジュール設定（プラグイン等）
+│   │   │   └── p10k.zsh             # Powerlevel10kプロンプト設定
+│   │   ├── tmux/default.nix         # tmuxモジュール設定
+│   │   ├── neovim/                   # Neovim関連設定
+│   │   │   ├── default.nix          # Neovimモジュール設定（LSP等）
+│   │   │   ├── README.md            # Neovim設定の仕組み解説
+│   │   │   └── nvim.lua/            # Neovim設定ファイル（Gitサブモジュール）
+│   │   ├── claude/                   # Claude Code関連設定
+│   │   │   ├── default.nix          # Claudeモジュール設定（unstable使用）
+│   │   │   └── CLAUDE.md            # Claude設定ドキュメント
+│   │   └── ghostty/default.nix      # Ghosttyターミナルエミュレータ設定
+│   └── system/                       # NixOSシステム共通設定
+│       ├── common.nix                # timezone, locale, docker, nix設定
+│       └── zsh-system.nix            # システムレベルzsh有効化
+│
+└── hosts/                            # 環境固有設定
+    └── nixos-wsl/                    # NixOS-WSL固有設定
+        ├── default.nix               # WSL固有設定（wslブロック、ユーザー、stateVersion）
+        ├── configuration.nix         # システムモジュール統合
+        └── home.nix                  # ユーザー環境モジュール統合
 ```
+
+この構造により、以下の利点があります：
+- **OS非依存のユーザー環境**: `modules/home/`は完全にOS非依存で、NixOSとmacOS（nix-darwin）で共用可能
+- **環境固有設定の分離**: WSL、macOS等の環境固有設定は`hosts/`以下に配置
+- **保守性向上**: 設定の責務がディレクトリで明確に分離されている
+- **拡張性**: 新しい環境（macOS等）の追加が容易
 
 ## 前提条件
 
@@ -45,8 +64,8 @@ nixos-config/
 1. NixOS-WSL環境にこのリポジトリをクローン（サブモジュールも含む）：
 
 ```bash
-git clone --recursive <repository-url> ~/nixos-config
-cd ~/nixos-config
+git clone --recursive <repository-url> /mnt/c/Users/<your-username>/nixos-config
+cd /mnt/c/Users/<your-username>/nixos-config
 ```
 
 または、既にクローンしている場合はサブモジュールを初期化：
@@ -58,8 +77,10 @@ git submodule update --init --recursive
 2. 設定を適用：
 
 ```bash
-sudo nixos-rebuild switch --flake .
+sudo nixos-rebuild switch --flake .#nixos
 ```
+
+**注意**: `#nixos`はflake.nix内で定義された設定名（`nixosConfigurations.nixos`）を指定しています。
 
 ## 主要コンポーネント
 
@@ -161,13 +182,15 @@ nse   # nix search nixpkgs
 | nixpkgs-unstable | nixos-unstable（最新パッケージ用） |
 | home-manager | release-25.05 |
 | NixOS-WSL | release-25.05 |
-| nvim-config | ローカルサブモジュール（元リポジトリ：github:amosoisin/nvim.lua） |
+| nvim-config | ローカルサブモジュール（`modules/home/neovim/nvim.lua`、元リポジトリ：github:amosoisin/nvim.lua） |
 
 ## カスタマイズ
 
+モジュールベースの構造により、設定の編集場所が明確になっています。
+
 ### パッケージの追加
 
-`home.nix`の`home.packages`にパッケージを追加：
+`modules/home/default.nix`の`home.packages`にパッケージを追加：
 
 ```nix
 home.packages = with pkgs; [
@@ -178,7 +201,7 @@ home.packages = with pkgs; [
 
 ### Zshプラグインの追加
 
-`zsh/zsh.nix`の`plugins`リストにプラグインを追加：
+`modules/home/zsh/default.nix`の`plugins`リストにプラグインを追加：
 
 ```nix
 plugins = [
@@ -191,26 +214,49 @@ plugins = [
 ];
 ```
 
+### WSL固有設定の変更
+
+`hosts/nixos-wsl/default.nix`でWSL固有の設定を変更：
+
+```nix
+{
+  wsl = {
+    enable = true;
+    # WSL設定をカスタマイズ...
+  };
+}
+```
+
+### 新しい環境の追加（例: macOS）
+
+1. `hosts/darwin/`ディレクトリを作成
+2. `hosts/darwin/default.nix`にmacOS固有設定を記述
+3. `hosts/darwin/configuration.nix`でシステムモジュールを統合
+4. `hosts/darwin/home.nix`で`modules/home/`をインポート（完全に再利用可能）
+5. `flake.nix`に`darwinConfigurations`を追加
+
+詳細は`CLAUDE.md`の「新しい環境の追加方法」セクションを参照してください。
+
 ### Neovim設定の変更
 
-Neovim設定ファイルはGitサブモジュール（neovim/nvim.lua）として管理されています。
+Neovim設定ファイルはGitサブモジュール（modules/home/neovim/nvim.lua）として管理されています。
 
 **設定ファイル（nvim.lua）を更新するには**：
 
 ```bash
 # サブモジュールを最新版に更新
-cd neovim/nvim.lua
+cd modules/home/neovim/nvim.lua
 git pull origin main
-cd ../..
+cd ../../../..
 
 # または、リポジトリルートから
-git submodule update --remote neovim/nvim.lua
+git submodule update --remote modules/home/neovim/nvim.lua
 
 # 設定を適用
 nrs
 ```
 
-**LSPサーバーを追加する場合**は`neovim/neovim.nix`を編集：
+**LSPサーバーを追加する場合**は`modules/home/neovim/default.nix`を編集：
 
 ```nix
 programs.neovim = {
@@ -228,10 +274,10 @@ programs.neovim = {
 git submodule status
 
 # サブモジュールを特定のコミットに固定
-cd neovim/nvim.lua
+cd modules/home/neovim/nvim.lua
 git checkout <commit-hash>
-cd ../..
-git add neovim/nvim.lua
+cd ../../../..
+git add modules/home/neovim/nvim.lua
 git commit -m "fix: pin nvim.lua to specific version"
 ```
 
