@@ -11,8 +11,23 @@
     extraConfig = {
       core = {
         editor = "nvim";
-        pager = "less";
+        pager = "delta";
         quotepath = false;
+      };
+
+      interactive = {
+        diffFilter = "delta --color-only";
+      };
+
+      delta = {
+        navigate = true;
+        dark = true;
+        side-by-side = true;
+        line-numbers = true;
+      };
+
+      merge = {
+        conflictStyle = "zdiff3";
       };
 
       color = {
