@@ -1,6 +1,9 @@
 { config, lib, pkgs, ... }:
 
 {
+  # ===== プライマリーユーザー設定 =====
+  system.primaryUser = "amosoisin";
+
   # ===== ユーザー定義 =====
   users.users.amosoisin = {
     name = "amosoisin";
