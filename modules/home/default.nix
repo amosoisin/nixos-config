@@ -57,11 +57,6 @@
     universal-ctags
     shellcheck
 
-    # ===== ネットワークツール =====
-    nettools
-    fping
-    iputils
-
     # ===== Git関連 =====
     gh
     pkgs.delta
