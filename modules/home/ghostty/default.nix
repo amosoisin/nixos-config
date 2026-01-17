@@ -1,8 +1,8 @@
-{ config, pkgs, ... }:
+{ pkgs-unstable, ... }:
 
 {
   home.packages = [
-    pkgs.ghostty
+    pkgs-unstable.ghostty
   ];
 
   # Ghostty設定ファイルを~/.config/ghostty/configに配置
