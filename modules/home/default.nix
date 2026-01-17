@@ -7,7 +7,6 @@
     ./tmux
     (import ./neovim { inherit config pkgs lib inputs; })
     (import ./claude { inherit pkgs-unstable; })
-    (import ./ghostty { inherit pkgs-unstable; })
   ];
 
   home.packages = with pkgs; [
