@@ -37,7 +37,7 @@ nixos-config/
 │   │   ├── claude/                   # Claude Code関連設定
 │   │   │   ├── default.nix          # Claudeモジュール設定（unstable使用）
 │   │   │   └── CLAUDE.md            # Claude設定ドキュメント
-│   │   └── ghostty/default.nix      # Ghosttyターミナルエミュレータ設定
+│   │   └── ghostty/default.nix      # Ghosttyターミナルエミュレータ設定（現在無効化）
 │   └── system/                       # NixOSシステム共通設定
 │       ├── common.nix                # timezone, locale, docker, nix設定
 │       └── zsh-system.nix            # システムレベルzsh有効化
@@ -48,7 +48,7 @@ nixos-config/
     │   ├── configuration.nix         # システムモジュール統合
     │   └── home.nix                  # ユーザー環境モジュール統合
     └── darwin/                       # macOS固有設定
-        ├── default.nix               # macOS固有設定（システムデフォルト、stateVersion）
+        ├── default.nix               # macOS固有設定（primaryUser、システムデフォルト、stateVersion）
         ├── configuration.nix         # システムモジュール統合
         └── home.nix                  # ユーザー環境モジュール統合
 ```
@@ -68,7 +68,8 @@ nixos-config/
 | NixOS-WSL | x86_64-linux | nixos | nixos | /home/nixos |
 | macOS (Apple Silicon) | aarch64-darwin | darwin | amosoisin | /Users/amosoisin |
 
-`modules/home/`の設定（Git, Zsh, tmux, Neovim, Claude Code, Ghostty等）は完全にOS非依存で、両環境で共用できます。
+`modules/home/`の設定（Git, Zsh, tmux, Neovim, Claude Code等）は完全にOS非依存で、両環境で共用できます。
+**注意**: GhosttyはmacOS環境でbrokenのため現在無効化されています。Linux専用パッケージ（nettools, fping, iputils）はNixOS-WSL環境のみで定義されています。
 
 ## 前提条件
 
@@ -159,10 +160,10 @@ darwin-rebuild switch --flake .#darwin
 
 | 設定項目 | 値 |
 |---------|-----|
-| タイムゾーン | Asia/Tokyo |
-| ロケール | ja_JP.UTF-8 |
+| プライマリユーザー | amosoisin |
 | デフォルトシェル | Zsh |
 | Dock | 自動非表示有効 |
+| キーボード | CapsLock→Control変更 |
 
 ### インストールされるパッケージ
 
@@ -226,7 +227,12 @@ darwin-rebuild switch --flake .#darwin
 ### Claude Code設定
 
 - **インストール元**: nixpkgs-unstable（常に最新バージョンを取得）
-- **設定ファイル**: `claude/claude.nix`
+- **設定ファイル**: `modules/home/claude/default.nix`
+
+### Ghostty設定
+
+- **現在の状態**: macOS環境でbrokenのため無効化
+- **設定ファイル**: `modules/home/ghostty/default.nix`（存在するが使用されていない）
 
 ## よく使うコマンド
 
@@ -282,7 +288,7 @@ fzf
 | nixpkgs-unstable | nixos-unstable | 最新パッケージ用（Claude Code等） |
 | home-manager | release-25.05 | ユーザー環境管理 |
 | NixOS-WSL | release-25.05 | NixOS-WSL環境のみ |
-| nix-darwin | master | macOS環境のみ |
+| nix-darwin | nix-darwin-25.05 | macOS環境のみ |
 | nvim-config | ローカルサブモジュール | `modules/home/neovim/nvim.lua`、元リポジトリ：github:amosoisin/nvim.lua |
 
 ## カスタマイズ
@@ -331,10 +337,10 @@ plugins = [
 ### 新しい環境の追加（例: macOS）
 
 1. `hosts/darwin/`ディレクトリを作成
-2. `hosts/darwin/default.nix`にmacOS固有設定を記述
+2. `hosts/darwin/default.nix`にmacOS固有設定を記述（`system.primaryUser`を含む）
 3. `hosts/darwin/configuration.nix`でシステムモジュールを統合
-4. `hosts/darwin/home.nix`で`modules/home/`をインポート（完全に再利用可能）
-5. `flake.nix`に`darwinConfigurations`を追加
+4. `hosts/darwin/home.nix`で`modules/home/`をインポート（ユーザー設定を定義）
+5. `flake.nix`に`darwinConfigurations`を追加（リリースブランチを明示）
 
 詳細は`CLAUDE.md`の「新しい環境の追加方法」セクションを参照してください。
 

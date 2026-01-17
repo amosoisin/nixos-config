@@ -1,4 +1,6 @@
 # 概要
+これはnixの設定ですが、必ずしもNix環境で変更を行っている訳ではないので、
+テスト実行時はテスト実行可能環境かどうかを事前に確認してください。
 
 ## プロジェクト構成
 
@@ -45,7 +47,7 @@ nixos-config/
 ## ファイルの役割
 
 ### flake.nix
-- **入力**: nixpkgs, home-manager, nixos-wsl（すべてrelease-25.05）、darwin（nix-darwin）、nixpkgs-unstable（最新パッケージ用）、nvim-config（ローカルサブモジュール）
+- **入力**: nixpkgs, home-manager, nixos-wsl（すべてrelease-25.05）、darwin（nix-darwin、nix-darwin-25.05ブランチ）、nixpkgs-unstable（最新パッケージ用）、nvim-config（ローカルサブモジュール）
 - **出力**:
   - `nixosConfigurations.nixos`（NixOS-WSL用設定）
   - `darwinConfigurations.darwin`（macOS用設定）
@@ -67,10 +69,10 @@ nixos-config/
 ユーザー環境の共通設定（OS非依存、NixOSとmacOSで共用可能）
 
 - **default.nix**: home-manager統合ファイル
-  - `home.username`, `home.homeDirectory`, `home.stateVersion`
+  - `home.stateVersion`（ユーザー名とホームディレクトリは各環境のhome.nixで個別に定義）
   - 全環境共通パッケージ（ripgrep, fd, eza, bat, lazygit等）
   - プログラム設定（fzf, zoxide, bat, eza）
-  - 各モジュールのインポート
+  - 各モジュールのインポート（git, zsh, tmux, neovim, claude）
 
 - **git/**: Gitモジュール設定
   - エイリアス（`s`, `g`, `difff`, `cm`）、エディタ（nvim）、グローバルignore
@@ -97,8 +99,9 @@ nixos-config/
   - 安定版nixpkgsでは古いバージョンになるため、unstableを使用
   - `CLAUDE.md`: Claude設定ドキュメント
 
-- **ghostty/**: Ghosttyターミナルエミュレータ設定
-  - 必要に応じて設定ファイル（`~/.config/ghostty/config`）を配置可能
+- **ghostty/**: Ghosttyターミナルエミュレータ設定（現在無効化）
+  - macOS環境でbrokenとマークされているため、現在は使用していない
+  - NixOS-WSL環境でのみ利用可能な可能性あり
 
 ### hosts/nixos-wsl/
 NixOS-WSL環境固有の設定
@@ -115,11 +118,14 @@ NixOS-WSL環境固有の設定
 
 - **home.nix**: ユーザー環境モジュール統合
   - `modules/home/`をインポート（全モジュールを一括取り込み）
+  - NixOS-WSL用ユーザー設定（username: nixos、homeDirectory: /home/nixos）
+  - Linux専用パッケージ（nettools, fping, iputils）を追加定義
 
 ### hosts/darwin/
 macOS環境固有の設定
 
 - **default.nix**: macOS固有設定
+  - プライマリユーザー設定（`system.primaryUser = "amosoisin"`、nix-darwin 25.05以降で必須）
   - ユーザー定義（amososinユーザー、/Users/amosoisin）
   - macOSシステム設定（Dock、Finder、トラックパッド、スクリーンセーバー等）
   - NSGlobalDomain設定（ダークモード、キーボードリピート、自動修正無効化等）
@@ -137,7 +143,8 @@ macOS環境固有の設定
 
 - **home.nix**: ユーザー環境モジュール統合
   - `modules/home/`をインポート（NixOSと完全共用）
-  - macOS用ユーザー設定のオーバーライド（username: amosoisin、homeDirectory: /Users/amosoisin）
+  - macOS用ユーザー設定（username: amosoisin、homeDirectory: /Users/amosoisin）
+  - `home.stateVersion = "25.05"`
 
 ## 編集時の注意事項
 
@@ -165,6 +172,7 @@ macOS環境固有の設定
    ```
 
 2. **`hosts/darwin/default.nix`にmacOS固有設定を記述**
+   - プライマリユーザー設定（`system.primaryUser`、nix-darwin 25.05以降で必須）
    - ユーザー定義（name, home, shell）
    - macOSシステム設定（Dock、Finder、NSGlobalDomain、トラックパッド、スクリーンセーバー等）
    - キーボード設定（CapsLockをControlに変更）
@@ -180,16 +188,18 @@ macOS環境固有の設定
 
 4. **`hosts/darwin/home.nix`でユーザー環境モジュールを統合**
    - `modules/home/`をインポート（完全にOS非依存なので、そのまま再利用可能）
-   - macOS用ユーザー設定のオーバーライド（username, homeDirectory）
+   - macOS用ユーザー設定（username, homeDirectory, stateVersion）
 
 5. **`flake.nix`に`darwinConfigurations`を追加**
-   - `inputs.darwin.url = "github:lnl7/nix-darwin"`を追加
+   - `inputs.darwin.url = "github:lnl7/nix-darwin/nix-darwin-25.05"`を追加（リリースブランチを明示）
    - `darwinConfigurations.darwin`を定義
    - `system = "aarch64-darwin"`を指定
    - `pkgs-unstable`をaarch64-darwin用に定義し、specialArgsとextraSpecialArgsで渡す
 
 6. **共通設定の再利用性**
-   - `modules/home/`: **100%そのまま使用可能**（git, zsh, tmux, neovim, claude, ghostty）
+   - `modules/home/`: **ほぼそのまま使用可能**（git, zsh, tmux, neovim, claude）
+     - 注意: ghosttyは現在macOSでbrokenのため無効化
+     - Linux専用パッケージ（nettools, fping, iputils）はNixOS-WSL環境のhome.nixのみで定義
    - `modules/system/zsh-system.nix`: そのまま使用可能
    - `modules/system/common.nix`: **macOSでは使用不可**（Docker等はNixOS専用）、必要な設定は`hosts/darwin/configuration.nix`に直接記述
 

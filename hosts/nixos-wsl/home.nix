@@ -6,7 +6,7 @@
   home.username = "nixos";
   home.homeDirectory = "/home/nixos";
 
-  home.packages = withP pkgs; [
+  home.packages = with pkgs; [
     nettools
     fping
     iputils
