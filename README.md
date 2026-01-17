@@ -116,7 +116,16 @@ sudo nixos-rebuild switch --flake .#nixos
 sh <(curl -L https://nixos.org/nix/install)
 ```
 
-2. nix-darwinをインストール：
+2. Homebrewをインストール（まだの場合）：
+
+```bash
+# 公式インストールスクリプト
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
+**重要**: この設定ではnix-darwinのパッケージマネージャー機能を無効化（`nix.enable = false`）し、Homebrewをメインのパッケージマネージャーとして使用します。そのため、nix-darwinをインストールする前にHomebrewのインストールが必要です。
+
+3. nix-darwinをインストール：
 
 ```bash
 # Nix Flakesを有効化
@@ -127,14 +136,14 @@ echo "experimental-features = nix-command flakes" >> ~/.config/nix/nix.conf
 nix run nix-darwin -- switch --flake <repository-url>#darwin
 ```
 
-3. リポジトリをクローン（サブモジュールも含む）：
+4. リポジトリをクローン（サブモジュールも含む）：
 
 ```bash
 git clone --recursive <repository-url> ~/nixos-config
 cd ~/nixos-config
 ```
 
-4. 設定を適用：
+5. 設定を適用：
 
 ```bash
 darwin-rebuild switch --flake .#darwin

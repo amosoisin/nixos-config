@@ -12,6 +12,9 @@
   # Unfreeパッケージ許可
   nixpkgs.config.allowUnfree = true;
 
+  # Nixパッケージマネージャーの無効化（Homebrewを使用）
+  nix.enable = false;
+
   # Homebrew設定
   homebrew = {
     enable = true;

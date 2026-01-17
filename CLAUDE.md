@@ -138,7 +138,8 @@ macOS環境固有の設定
   - `modules/system/zsh-system.nix`をインポート（NixOSと共用可能）
   - Nix実験的機能の有効化（flakes, nix-command）
   - nixpkgs設定（allowUnfree）
-  - Homebrew有効化
+  - **Nixパッケージマネージャーの無効化**（`nix.enable = false`）：nix-darwinのパッケージ管理機能を無効化し、Homebrewをメインのパッケージマネージャーとして使用
+  - Homebrew有効化（**注意**: nix-darwinインストール前に手動でHomebrewをインストールする必要があります）
   - システム共通パッケージ（zsh, git）
 
 - **home.nix**: ユーザー環境モジュール統合
@@ -182,7 +183,9 @@ macOS環境固有の設定
 3. **`hosts/darwin/configuration.nix`でシステムモジュールを統合**
    - `./default.nix`（macOS固有設定）をインポート
    - `modules/system/zsh-system.nix`をインポート（NixOSと共用可能）
-   - Nix実験的機能の有効化、nixpkgs設定、Homebrew有効化
+   - Nix実験的機能の有効化、nixpkgs設定
+   - **Nixパッケージマネージャーの無効化**（`nix.enable = false`）：Homebrewをメインのパッケージマネージャーとして使用する場合に設定
+   - Homebrew有効化（**重要**: nix-darwinインストール前に手動でHomebrewをインストールする必要があります）
    - システム共通パッケージ（zsh, git）
    - 注意: `modules/system/common.nix`はNixOS専用のため、macOSでは使用しない
 
@@ -223,6 +226,7 @@ macOS環境固有の設定
 | エディタ | Neovim | Neovim |
 | タイムゾーン | Asia/Tokyo | （システム設定に依存） |
 | ロケール | ja_JP.UTF-8 | （システム設定に依存） |
+| パッケージマネージャー | Nix | Homebrew（`nix.enable = false`） |
 | State version | 25.05 | 5 |
 | システムアーキテクチャ | x86_64-linux | aarch64-darwin |
 
