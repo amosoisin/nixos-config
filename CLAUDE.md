@@ -32,19 +32,26 @@ nixos-config/
 │       └── zsh-system.nix            # システムレベルzsh有効化
 │
 └── hosts/                            # 環境固有設定
-    └── nixos-wsl/                    # NixOS-WSL固有設定
-        ├── default.nix               # WSL固有設定（wslブロック、ユーザー、stateVersion）
-        ├── configuration.nix         # システムモジュール統合
+    ├── nixos-wsl/                    # NixOS-WSL固有設定
+    │   ├── default.nix               # WSL固有設定（wslブロック、ユーザー、stateVersion）
+    │   ├── configuration.nix         # システムモジュール統合
+    │   └── home.nix                  # ユーザー環境モジュール統合
+    └── darwin/                       # macOS固有設定
+        ├── default.nix               # macOS固有設定（システム設定、キーボード設定、ユーザー定義）
+        ├── configuration.nix         # システムモジュール統合（Homebrew、Nix設定）
         └── home.nix                  # ユーザー環境モジュール統合
 ```
 
 ## ファイルの役割
 
 ### flake.nix
-- **入力**: nixpkgs, home-manager, nixos-wsl（すべてrelease-25.05）、nixpkgs-unstable（最新パッケージ用）、nvim-config（ローカルサブモジュール）
-- **出力**: `nixosConfigurations.nixos`（NixOS-WSL用設定）
+- **入力**: nixpkgs, home-manager, nixos-wsl（すべてrelease-25.05）、darwin（nix-darwin）、nixpkgs-unstable（最新パッケージ用）、nvim-config（ローカルサブモジュール）
+- **出力**:
+  - `nixosConfigurations.nixos`（NixOS-WSL用設定）
+  - `darwinConfigurations.darwin`（macOS用設定）
 - 環境ごとの構成を`hosts/`以下から参照
 - `pkgs-unstable`を定義し、最新パッケージが必要なモジュール（claudeなど）に渡す
+- 各環境用に個別の`pkgs-unstable`を定義（x86_64-linux、aarch64-darwin）
 
 ### modules/system/
 システムレベルの共通設定（NixOS環境で使用）
@@ -109,6 +116,29 @@ NixOS-WSL環境固有の設定
 - **home.nix**: ユーザー環境モジュール統合
   - `modules/home/`をインポート（全モジュールを一括取り込み）
 
+### hosts/darwin/
+macOS環境固有の設定
+
+- **default.nix**: macOS固有設定
+  - ユーザー定義（amososinユーザー、/Users/amosoisin）
+  - macOSシステム設定（Dock、Finder、トラックパッド、スクリーンセーバー等）
+  - NSGlobalDomain設定（ダークモード、キーボードリピート、自動修正無効化等）
+  - キーボード設定（CapsLockをControlに変更）
+  - スクリーンショット保存設定
+  - `system.stateVersion = 5`
+
+- **configuration.nix**: システムモジュール統合
+  - `./default.nix`（macOS固有設定）をインポート
+  - `modules/system/zsh-system.nix`をインポート（NixOSと共用可能）
+  - Nix実験的機能の有効化（flakes, nix-command）
+  - nixpkgs設定（allowUnfree）
+  - Homebrew有効化
+  - システム共通パッケージ（zsh, git）
+
+- **home.nix**: ユーザー環境モジュール統合
+  - `modules/home/`をインポート（NixOSと完全共用）
+  - macOS用ユーザー設定のオーバーライド（username: amosoisin、homeDirectory: /Users/amosoisin）
+
 ## 編集時の注意事項
 
 ### Nix構文
@@ -119,12 +149,15 @@ NixOS-WSL環境固有の設定
 
 ### 設定変更時の確認事項
 1. **flake.nix**: 入力の追加・変更時は`nix flake update`が必要
-2. **modules/system/**: システム設定変更後は`sudo nixos-rebuild switch`
-3. **modules/home/**: パッケージ・プログラム設定変更後は`sudo nixos-rebuild switch`
-4. **hosts/nixos-wsl/**: WSL固有設定変更後は`sudo nixos-rebuild switch`
+2. **modules/system/**: システム設定変更後は、NixOSでは`sudo nixos-rebuild switch`、macOSでは`darwin-rebuild switch --flake .#darwin`
+3. **modules/home/**: パッケージ・プログラム設定変更後は、NixOSでは`sudo nixos-rebuild switch`、macOSでは`darwin-rebuild switch --flake .#darwin`
+4. **hosts/nixos-wsl/**: WSL固有設定変更後は`sudo nixos-rebuild switch --flake .#nixos`
+5. **hosts/darwin/**: macOS固有設定変更後は`darwin-rebuild switch --flake .#darwin`
 
 ### 新しい環境の追加方法（例: macOS）
-複数環境対応のため、モジュールベースの構造を採用しています。新しい環境（macOS等）を追加する手順：
+複数環境対応のため、モジュールベースの構造を採用しています。macOS環境は既に実装されており、`hosts/darwin/`として参照できます。新しい環境を追加する際は、以下の手順を参考にしてください。
+
+#### macOS環境の実装例（`hosts/darwin/`）
 
 1. **`hosts/darwin/`ディレクトリを作成**
    ```bash
@@ -132,68 +165,33 @@ NixOS-WSL環境固有の設定
    ```
 
 2. **`hosts/darwin/default.nix`にmacOS固有設定を記述**
-   ```nix
-   { config, pkgs, ... }:
-   {
-     # macOS固有設定（Homebrew、macOS特有の設定等）
-     system.stateVersion = 5;
-
-     # macOSのシステム設定
-     system.defaults = {
-       dock.autohide = true;
-       # ...
-     };
-   }
-   ```
+   - ユーザー定義（name, home, shell）
+   - macOSシステム設定（Dock、Finder、NSGlobalDomain、トラックパッド、スクリーンセーバー等）
+   - キーボード設定（CapsLockをControlに変更）
+   - スクリーンショット保存設定
+   - `system.stateVersion = 5`
 
 3. **`hosts/darwin/configuration.nix`でシステムモジュールを統合**
-   ```nix
-   { config, lib, pkgs, ... }:
-   {
-     imports = [
-       # modules/system/はNixOS専用のため、macOSでは使用しない
-       # macOS用の代替モジュールを用意するか、直接設定を記述
-       ./default.nix
-     ];
-   }
-   ```
+   - `./default.nix`（macOS固有設定）をインポート
+   - `modules/system/zsh-system.nix`をインポート（NixOSと共用可能）
+   - Nix実験的機能の有効化、nixpkgs設定、Homebrew有効化
+   - システム共通パッケージ（zsh, git）
+   - 注意: `modules/system/common.nix`はNixOS専用のため、macOSでは使用しない
 
 4. **`hosts/darwin/home.nix`でユーザー環境モジュールを統合**
-   ```nix
-   { config, pkgs, lib, inputs, pkgs-unstable, ... }:
-   {
-     # modules/home/は完全にOS非依存なので、そのまま再利用可能
-     imports = [ ../../modules/home ];
-   }
-   ```
+   - `modules/home/`をインポート（完全にOS非依存なので、そのまま再利用可能）
+   - macOS用ユーザー設定のオーバーライド（username, homeDirectory）
 
 5. **`flake.nix`に`darwinConfigurations`を追加**
-   ```nix
-   inputs.darwin.url = "github:lnl7/nix-darwin";
-
-   outputs = { self, nixpkgs, home-manager, nixos-wsl, darwin, ... }:
-   {
-     # 既存のNixOS設定...
-     nixosConfigurations.nixos = { ... };
-
-     # macOS設定を追加
-     darwinConfigurations.macbook = darwin.lib.darwinSystem {
-       system = "aarch64-darwin";
-       modules = [
-         ./hosts/darwin/configuration.nix
-         home-manager.darwinModules.home-manager
-         {
-           home-manager.users.username = import ./hosts/darwin/home.nix;
-         }
-       ];
-     };
-   };
-   ```
+   - `inputs.darwin.url = "github:lnl7/nix-darwin"`を追加
+   - `darwinConfigurations.darwin`を定義
+   - `system = "aarch64-darwin"`を指定
+   - `pkgs-unstable`をaarch64-darwin用に定義し、specialArgsとextraSpecialArgsで渡す
 
 6. **共通設定の再利用性**
    - `modules/home/`: **100%そのまま使用可能**（git, zsh, tmux, neovim, claude, ghostty）
    - `modules/system/zsh-system.nix`: そのまま使用可能
-   - `modules/system/common.nix`: 一部（timezone, locale）のみ使用可能（Docker等はNixOS専用）
+   - `modules/system/common.nix`: **macOSでは使用不可**（Docker等はNixOS専用）、必要な設定は`hosts/darwin/configuration.nix`に直接記述
 
 ### Gitサブモジュールの管理
 - **初回クローン時**: `git clone --recursive` または `git submodule update --init --recursive`
@@ -207,25 +205,35 @@ NixOS-WSL環境固有の設定
 
 ## 主要設定値
 
-| 項目 | 値 |
-|------|-----|
-| ユーザー名 | nixos |
-| ホームディレクトリ | /home/nixos |
-| シェル | Zsh |
-| エディタ | Neovim |
-| タイムゾーン | Asia/Tokyo |
-| ロケール | ja_JP.UTF-8 |
-| State version | 25.05 |
+| 項目 | NixOS-WSL | macOS (darwin) |
+|------|-----------|----------------|
+| ユーザー名 | nixos | amosoisin |
+| ホームディレクトリ | /home/nixos | /Users/amosoisin |
+| シェル | Zsh | Zsh |
+| エディタ | Neovim | Neovim |
+| タイムゾーン | Asia/Tokyo | （システム設定に依存） |
+| ロケール | ja_JP.UTF-8 | （システム設定に依存） |
+| State version | 25.05 | 5 |
+| システムアーキテクチャ | x86_64-linux | aarch64-darwin |
 
 ## コマンドリファレンス
 
 ### NixOS管理（エイリアス）
 ```bash
-nrs   # sudo nixos-rebuild switch --flake .  （設定適用）
-nrt   # sudo nixos-rebuild test --flake .    （テスト）
-nrb   # sudo nixos-rebuild boot --flake .    （次回起動時反映）
-nfu   # nix flake update                      （Flakes更新）
-nse   # nix search nixpkgs                    （パッケージ検索）
+nrs   # sudo nixos-rebuild switch --flake .#nixos  （設定適用）
+nrt   # sudo nixos-rebuild test --flake .#nixos    （テスト）
+nrb   # sudo nixos-rebuild boot --flake .#nixos    （次回起動時反映）
+nfu   # nix flake update                            （Flakes更新）
+nse   # nix search nixpkgs                          （パッケージ検索）
+```
+
+### macOS (darwin) 管理
+```bash
+darwin-rebuild switch --flake .#darwin  # 設定適用
+darwin-rebuild build --flake .#darwin   # ビルドのみ（適用しない）
+darwin-rebuild check --flake .#darwin   # 設定チェック
+nix flake update                         # Flakes更新
+nix search nixpkgs                       # パッケージ検索
 ```
 
 ### 開発関連

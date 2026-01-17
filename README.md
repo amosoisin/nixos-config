@@ -1,10 +1,11 @@
-# NixOS-WSL Configuration
+# NixOS Configuration
 
-NixOS-WSL環境向けのNixOS設定リポジトリです。Nix Flakesとhome-managerを使用した最新の設定管理アプローチを採用しています。
+NixOS-WSLとmacOS（nix-darwin）に対応したNix設定リポジトリです。Nix Flakesとhome-managerを使用した最新の設定管理アプローチを採用しています。
 
 ## 特徴
 
-- **WSL2特化** - Windows WSL2環境向けに最適化
+- **マルチプラットフォーム** - NixOS-WSL（x86_64-linux）とmacOS（aarch64-darwin、Apple Silicon）に対応
+- **設定の共有** - ユーザー環境設定（`modules/home/`）は完全にOS非依存で、両環境で共用可能
 - **Flakes採用** - 再現性の高い最新のNix管理方式
 - **開発環境充実** - Go, Rust, Python, Node.js対応
 - **LSP完備** - 主要言語のLanguage Server統合
@@ -42,8 +43,12 @@ nixos-config/
 │       └── zsh-system.nix            # システムレベルzsh有効化
 │
 └── hosts/                            # 環境固有設定
-    └── nixos-wsl/                    # NixOS-WSL固有設定
-        ├── default.nix               # WSL固有設定（wslブロック、ユーザー、stateVersion）
+    ├── nixos-wsl/                    # NixOS-WSL固有設定
+    │   ├── default.nix               # WSL固有設定（wslブロック、ユーザー、stateVersion）
+    │   ├── configuration.nix         # システムモジュール統合
+    │   └── home.nix                  # ユーザー環境モジュール統合
+    └── darwin/                       # macOS固有設定
+        ├── default.nix               # macOS固有設定（システムデフォルト、stateVersion）
         ├── configuration.nix         # システムモジュール統合
         └── home.nix                  # ユーザー環境モジュール統合
 ```
@@ -52,16 +57,35 @@ nixos-config/
 - **OS非依存のユーザー環境**: `modules/home/`は完全にOS非依存で、NixOSとmacOS（nix-darwin）で共用可能
 - **環境固有設定の分離**: WSL、macOS等の環境固有設定は`hosts/`以下に配置
 - **保守性向上**: 設定の責務がディレクトリで明確に分離されている
-- **拡張性**: 新しい環境（macOS等）の追加が容易
+- **拡張性**: 新しい環境の追加が容易
+
+## 対応環境
+
+このリポジトリは以下の環境に対応しています：
+
+| 環境 | プラットフォーム | ホスト名 | ユーザー名 | ホームディレクトリ |
+|------|--------------|----------|----------|------------------|
+| NixOS-WSL | x86_64-linux | nixos | nixos | /home/nixos |
+| macOS (Apple Silicon) | aarch64-darwin | darwin | amosoisin | /Users/amosoisin |
+
+`modules/home/`の設定（Git, Zsh, tmux, Neovim, Claude Code, Ghostty等）は完全にOS非依存で、両環境で共用できます。
 
 ## 前提条件
 
+### NixOS-WSL環境
 - Windows 10/11 with WSL2
 - NixOS-WSL がインストール済み
 
+### macOS環境
+- macOS（Apple Siliconを推奨）
+- Nix package manager がインストール済み
+- nix-darwin がインストール済み（後述）
+
 ## セットアップ
 
-1. NixOS-WSL環境にこのリポジトリをクローン（サブモジュールも含む）：
+### NixOS-WSL環境のセットアップ
+
+1. リポジトリをクローン（サブモジュールも含む）：
 
 ```bash
 git clone --recursive <repository-url> /mnt/c/Users/<your-username>/nixos-config
@@ -82,9 +106,46 @@ sudo nixos-rebuild switch --flake .#nixos
 
 **注意**: `#nixos`はflake.nix内で定義された設定名（`nixosConfigurations.nixos`）を指定しています。
 
+### macOS環境のセットアップ
+
+1. Nix package managerをインストール（まだの場合）：
+
+```bash
+# 公式インストールスクリプト（マルチユーザーインストール推奨）
+sh <(curl -L https://nixos.org/nix/install)
+```
+
+2. nix-darwinをインストール：
+
+```bash
+# Nix Flakesを有効化
+mkdir -p ~/.config/nix
+echo "experimental-features = nix-command flakes" >> ~/.config/nix/nix.conf
+
+# nix-darwinを一時的にインストール
+nix run nix-darwin -- switch --flake <repository-url>#darwin
+```
+
+3. リポジトリをクローン（サブモジュールも含む）：
+
+```bash
+git clone --recursive <repository-url> ~/nixos-config
+cd ~/nixos-config
+```
+
+4. 設定を適用：
+
+```bash
+darwin-rebuild switch --flake .#darwin
+```
+
+**注意**: `#darwin`はflake.nix内で定義された設定名（`darwinConfigurations.darwin`）を指定しています。
+
 ## 主要コンポーネント
 
-### システム設定（configuration.nix）
+### システム設定
+
+#### NixOS-WSL（configuration.nix）
 
 | 設定項目 | 値 |
 |---------|-----|
@@ -93,6 +154,15 @@ sudo nixos-rebuild switch --flake .#nixos
 | Docker | 有効 |
 | デフォルトシェル | Zsh |
 | Windows相互運用 | 有効（PATHも含める） |
+
+#### macOS（configuration.nix）
+
+| 設定項目 | 値 |
+|---------|-----|
+| タイムゾーン | Asia/Tokyo |
+| ロケール | ja_JP.UTF-8 |
+| デフォルトシェル | Zsh |
+| Dock | 自動非表示有効 |
 
 ### インストールされるパッケージ
 
@@ -160,6 +230,8 @@ sudo nixos-rebuild switch --flake .#nixos
 
 ## よく使うコマンド
 
+### NixOS-WSL環境
+
 ```bash
 # 設定を適用
 nrs   # sudo nixos-rebuild switch --flake .
@@ -174,15 +246,44 @@ nfu   # nix flake update
 nse   # nix search nixpkgs
 ```
 
+### macOS環境
+
+```bash
+# 設定を適用
+darwin-rebuild switch --flake .#darwin
+
+# Flakesを更新
+nix flake update
+
+# パッケージ検索
+nix search nixpkgs
+```
+
+**共通コマンド**（環境に依存しないエイリアス）：
+```bash
+# Git（lazygit）
+lg
+
+# Neovim
+v
+
+# ディレクトリジャンプ
+z <directory-name>  # zoxide
+
+# ファジーファインダー
+fzf
+```
+
 ## 依存関係
 
-| コンポーネント | ブランチ/リポジトリ |
-|--------------|---------|
-| nixpkgs | nixos-25.05 |
-| nixpkgs-unstable | nixos-unstable（最新パッケージ用） |
-| home-manager | release-25.05 |
-| NixOS-WSL | release-25.05 |
-| nvim-config | ローカルサブモジュール（`modules/home/neovim/nvim.lua`、元リポジトリ：github:amosoisin/nvim.lua） |
+| コンポーネント | ブランチ/リポジトリ | 備考 |
+|--------------|---------|------|
+| nixpkgs | nixos-25.05 | 安定版パッケージ |
+| nixpkgs-unstable | nixos-unstable | 最新パッケージ用（Claude Code等） |
+| home-manager | release-25.05 | ユーザー環境管理 |
+| NixOS-WSL | release-25.05 | NixOS-WSL環境のみ |
+| nix-darwin | master | macOS環境のみ |
+| nvim-config | ローカルサブモジュール | `modules/home/neovim/nvim.lua`、元リポジトリ：github:amosoisin/nvim.lua |
 
 ## カスタマイズ
 
