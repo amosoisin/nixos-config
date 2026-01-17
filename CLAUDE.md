@@ -258,3 +258,51 @@ v     # nvim（Neovim起動）
 
 # 注意事項
 ソースコードの変更を実施した場合は、ドキュメント@CLAUDE.md、@README.mdも変更すること
+
+## トラブルシューティング
+
+### macOS: darwin-rebuild時の`/etc/zshenv`エラー
+
+**症状**:
+```
+error: Unexpected files in /etc, aborting activation
+```
+
+**原因**:
+nix-darwinは`/etc`ディレクトリ配下のファイル（`/etc/zshenv`、`/etc/zshrc`など）をシンボリックリンクとして管理します。既存のファイルが存在する場合、安全のため上書きせずにエラーで停止します。
+
+**解決方法**:
+
+1. **既存ファイルの内容を確認**（重要な設定が含まれていないか）:
+   ```bash
+   cat /etc/zshenv
+   ```
+
+2. **バックアップとしてリネーム**:
+   ```bash
+   sudo mv /etc/zshenv /etc/zshenv.before-nix-darwin
+   ```
+
+   他の関連ファイルも必要に応じて同様に処理:
+   ```bash
+   sudo mv /etc/zshrc /etc/zshrc.before-nix-darwin
+   sudo mv /etc/bashrc /etc/bashrc.before-nix-darwin
+   ```
+
+3. **darwin-rebuildを再実行**:
+   ```bash
+   darwin-rebuild switch --flake .#darwin
+   ```
+
+4. **動作確認**:
+   - 新しいzshセッションを開く
+   - 環境変数やパスが正しく設定されているか確認
+   - 問題があれば`modules/home/zsh/default.nix`に設定を追加
+
+**注意事項**:
+- バックアップファイル（`.before-nix-darwin`）はnix-darwinアンインストール時に自動復元されません
+- 重要な設定が含まれていた場合は、`modules/home/zsh/default.nix`または`hosts/darwin/default.nix`に統合することを推奨
+
+**参考**:
+- [nix-darwin Issue #149](https://github.com/LnL7/nix-darwin/issues/149)
+- [nix-darwin Issue #912](https://github.com/LnL7/nix-darwin/issues/912)

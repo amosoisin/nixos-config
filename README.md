@@ -151,6 +151,26 @@ darwin-rebuild switch --flake .#darwin
 
 **注意**: `#darwin`はflake.nix内で定義された設定名（`darwinConfigurations.darwin`）を指定しています。
 
+6. エラーが発生した場合の対処：
+
+もし`error: Unexpected files in /etc, aborting activation`というエラーが発生した場合は、以下の手順で対処してください：
+
+**原因**: nix-darwinが`/etc/zshenv`などの既存ファイルをシンボリックリンクとして管理しようとするため
+
+**対処方法**:
+```bash
+# 1. 既存ファイルの内容を確認（重要な設定がないか）
+cat /etc/zshenv
+
+# 2. バックアップとしてリネーム
+sudo mv /etc/zshenv /etc/zshenv.before-nix-darwin
+
+# 3. darwin-rebuildを再実行
+darwin-rebuild switch --flake .#darwin
+```
+
+詳細は`CLAUDE.md`の「トラブルシューティング」セクションを参照してください。
+
 ## 主要コンポーネント
 
 ### システム設定
@@ -396,6 +416,12 @@ cd ../../../..
 git add modules/home/neovim/nvim.lua
 git commit -m "fix: pin nvim.lua to specific version"
 ```
+
+## トラブルシューティング
+
+セットアップ時の問題や一般的なエラーについては、`CLAUDE.md`の「トラブルシューティング」セクションを参照してください。
+
+特にmacOS環境での`/etc/zshenv`エラーについては、詳細な対処方法を記載しています。
 
 ## ライセンス
 
