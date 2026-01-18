@@ -185,7 +185,7 @@ macOS環境固有の設定
    - `modules/system/zsh-system.nix`をインポート（NixOSと共用可能）
    - Nix実験的機能の有効化、nixpkgs設定
    - **Nixパッケージマネージャーの無効化**（`nix.enable = false`）：Homebrewをメインのパッケージマネージャーとして使用する場合に設定
-   - Homebrew有効化（**重要**: nix-darwinインストール前に手動でHomebrewをインストールする必要があります）
+   - Homebrew有効化（**注意**: nix-darwinインストール前に手動でHomebrewをインストールする必要があります）
    - システム共通パッケージ（zsh, git）
    - 注意: `modules/system/common.nix`はNixOS専用のため、macOSでは使用しない
 

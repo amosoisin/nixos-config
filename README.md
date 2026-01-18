@@ -123,7 +123,7 @@ sh <(curl -L https://nixos.org/nix/install)
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
 
-**重要**: この設定ではnix-darwinのパッケージマネージャー機能を無効化（`nix.enable = false`）し、Homebrewをメインのパッケージマネージャーとして使用します。そのため、nix-darwinをインストールする前にHomebrewのインストールが必要です。
+**重要**: この設定ではnix-darwinのパッケージマネージャー機能を無効化（`nix.enable = false`）し、Homebrewをメインのパッケージマネージャーとして使用します。そのため、**nix-darwinをインストールする前に手動でHomebrewをインストールする必要があります**。darwin-rebuildを実行してもHomebrewは自動的にインストールされません。
 
 3. nix-darwinをインストール：
 
@@ -171,6 +171,52 @@ darwin-rebuild switch --flake .#darwin
 
 詳細は`CLAUDE.md`の「トラブルシューティング」セクションを参照してください。
 
+### Homebrewパッケージの管理（macOS）
+
+この設定では、nix-darwinを通じてHomebrewパッケージを宣言的に管理できます。`hosts/darwin/configuration.nix`でHomebrewパッケージを定義することで、システム構成の一部として管理可能です。
+
+**基本的な使い方**：
+
+```nix
+# hosts/darwin/configuration.nix
+{
+  homebrew = {
+    enable = true;
+
+    # Formulaパッケージ（CLI アプリ）
+    brews = [
+      "wget"
+      "htop"
+    ];
+
+    # Caskパッケージ（GUI アプリ）
+    casks = [
+      "visual-studio-code"
+      "google-chrome"
+    ];
+
+    # Mac App Storeアプリ（mas-cliが必要）
+    masApps = {
+      "Xcode" = 497799835;
+    };
+
+    # 設定に記載されていないパッケージを自動削除（オプション）
+    cleanup = "uninstall";  # または "zap" で設定ファイルも削除
+
+    # Homebrewの自動更新を無効化（オプション）
+    autoUpdate = false;
+  };
+}
+```
+
+**現在の設定**：
+現在は基本的な有効化のみ（`homebrew.enable = true`）が設定されており、パッケージの宣言的管理は行っていません。必要に応じて上記の設定を追加してください。
+
+**注意事項**：
+- パッケージ追加後は`darwin-rebuild switch --flake .#darwin`で適用
+- `cleanup`オプションを有効にすると、設定にないパッケージが削除されるため注意
+- Mac App Storeアプリを管理するには`mas`コマンドが必要（`brews = ["mas"];`で追加可能）
+
 ## 主要コンポーネント
 
 ### システム設定
@@ -191,6 +237,8 @@ darwin-rebuild switch --flake .#darwin
 |---------|-----|
 | プライマリユーザー | amosoisin |
 | デフォルトシェル | Zsh |
+| パッケージマネージャー | Homebrew（nix-darwin経由で管理可能） |
+| Nixパッケージマネージャー | 無効化（`nix.enable = false`） |
 | Dock | 自動非表示有効 |
 | キーボード | CapsLock→Control変更 |
 
@@ -362,6 +410,34 @@ plugins = [
   };
 }
 ```
+
+### macOS固有設定とHomebrewパッケージの追加
+
+**システム設定の変更**: `hosts/darwin/default.nix`でmacOS固有の設定を変更
+
+**Homebrewパッケージの追加**: `hosts/darwin/configuration.nix`のhomebrewセクションにパッケージを追加：
+
+```nix
+{
+  homebrew = {
+    enable = true;
+
+    # CLIツールを追加
+    brews = [
+      "wget"
+      "htop"
+    ];
+
+    # GUIアプリを追加
+    casks = [
+      "visual-studio-code"
+      "google-chrome"
+    ];
+  };
+}
+```
+
+設定変更後は`darwin-rebuild switch --flake .#darwin`で適用してください。
 
 ### 新しい環境の追加（例: macOS）
 
