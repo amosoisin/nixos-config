@@ -18,6 +18,13 @@
   # Homebrew設定
   homebrew = {
     enable = true;
+
+    casks = [
+      "tailscale"
+      "ghostty"
+      "google-chrome"
+      "vlc"
+    ];
   };
 
   # システム共通パッケージ
