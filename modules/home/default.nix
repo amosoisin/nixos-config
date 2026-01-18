@@ -64,6 +64,8 @@
     # ===== その他 =====
     tmux
     squashfsTools
+
+    obsidian
   ];
 
   home.stateVersion = "25.05";
