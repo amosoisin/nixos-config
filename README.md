@@ -30,6 +30,7 @@ nixos-config/
 │   │   │   ├── default.nix          # Zshモジュール設定（プラグイン等）
 │   │   │   └── p10k.zsh             # Powerlevel10kプロンプト設定
 │   │   ├── tmux/default.nix         # tmuxモジュール設定
+│   │   ├── yazi/default.nix         # yaziファイルマネージャー設定
 │   │   ├── neovim/                   # Neovim関連設定
 │   │   │   ├── default.nix          # Neovimモジュール設定（LSP等）
 │   │   │   ├── README.md            # Neovim設定の仕組み解説
@@ -267,6 +268,7 @@ darwin-rebuild switch --flake .#darwin
 | bat | 構文ハイライト付きcat |
 | fzf | ファジーファインダー |
 | zoxide | スマートディレクトリジャンプ |
+| yazi | Rust製高速ファイルマネージャー |
 | lazygit | Git TUI |
 | tmux | ターミナルマルチプレクサ |
 

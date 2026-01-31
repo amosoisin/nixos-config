@@ -21,6 +21,7 @@ nixos-config/
 │   │   │   ├── default.nix          # Zshモジュール設定（プラグイン等）
 │   │   │   └── p10k.zsh             # Powerlevel10kプロンプト設定
 │   │   ├── tmux/default.nix         # tmuxモジュール設定
+│   │   ├── yazi/default.nix         # yaziファイルマネージャー設定
 │   │   ├── neovim/                   # Neovim関連設定
 │   │   │   ├── default.nix          # Neovimモジュール設定（LSP等）
 │   │   │   ├── README.md            # Neovim設定の仕組み解説
@@ -72,7 +73,7 @@ nixos-config/
   - `home.stateVersion`（ユーザー名とホームディレクトリは各環境のhome.nixで個別に定義）
   - 全環境共通パッケージ（ripgrep, fd, eza, bat, lazygit等）
   - プログラム設定（fzf, zoxide, bat, eza）
-  - 各モジュールのインポート（git, zsh, tmux, neovim, claude）
+  - 各モジュールのインポート（git, zsh, tmux, yazi, neovim, claude）
 
 - **git/**: Gitモジュール設定
   - エイリアス（`s`, `g`, `difff`, `cm`）、エディタ（nvim）、グローバルignore
@@ -87,6 +88,12 @@ nixos-config/
 - **tmux/**: tmuxモジュール設定
   - プレフィックスキー（`Ctrl-a`）、プラグイン（sensible, yank, resurrect, continuum）
   - キーバインド（ウィンドウ分割、ペイン移動）
+
+- **yazi/**: yaziファイルマネージャーモジュール設定
+  - Rust製の高速ターミナルファイルマネージャー
+  - Zsh統合（`programs.yazi.enableZshIntegration`）
+  - Vimライクなキーバインド（h/l で移動、Enter で開く）
+  - ファイルプレビュー機能、シンボリックリンク表示
 
 - **neovim/**: Neovimモジュール設定
   - LSPサーバー（clangd, pyright, bash-language-server等）

@@ -5,6 +5,7 @@
     ./git
     ./zsh
     ./tmux
+    ./yazi
     (import ./neovim { inherit config pkgs lib inputs; })
     (import ./claude { inherit pkgs-unstable; })
   ];
