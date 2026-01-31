@@ -12,7 +12,7 @@
     enableZshIntegration = true;
 
     settings = {
-      manager = {
+      mgr = {
         # ファイルマネージャーの表示設定
         show_hidden = true;
         show_symlink = true;
@@ -32,7 +32,7 @@
 
     # キーマップ設定（基本的なVimライクな操作）
     keymap = {
-      manager.prepend_keymap = [
+      mgr.prepend_keymap = [
         {
           on = [ "d" "d" ];
           run = "remove";
