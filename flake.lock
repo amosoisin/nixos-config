@@ -149,7 +149,58 @@
         "nixos-wsl": "nixos-wsl",
         "nixpkgs": "nixpkgs_2",
         "nixpkgs-unstable": "nixpkgs-unstable",
-        "nvim-config": "nvim-config"
+        "nvim-config": "nvim-config",
+        "yazi-bookmarks": "yazi-bookmarks",
+        "yazi-plugins": "yazi-plugins",
+        "yazi-smart-tab": "yazi-smart-tab"
+      }
+    },
+    "yazi-bookmarks": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1752096289,
+        "narHash": "sha256-GQFBRB2aQqmmuKZ0BpcCAC4r0JFKqIANZNhUC98SlwY=",
+        "owner": "dedukun",
+        "repo": "bookmarks.yazi",
+        "rev": "9ef1254d8afe88aba21cd56a186f4485dd532ab8",
+        "type": "github"
+      },
+      "original": {
+        "owner": "dedukun",
+        "repo": "bookmarks.yazi",
+        "type": "github"
+      }
+    },
+    "yazi-plugins": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1769792331,
+        "narHash": "sha256-yC3greK60RO09ILycwp6YXMV2AvFL/QliO70eOCEEWo=",
+        "owner": "yazi-rs",
+        "repo": "plugins",
+        "rev": "557684bd388c12111dd86a7fb59ab5f9b7826b87",
+        "type": "github"
+      },
+      "original": {
+        "owner": "yazi-rs",
+        "repo": "plugins",
+        "type": "github"
+      }
+    },
+    "yazi-smart-tab": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1757004805,
+        "narHash": "sha256-7PrXa6ZfUYxjgw70lnbrAf8DYTPkylMpynN/4y+OAic=",
+        "owner": "wekauwau",
+        "repo": "smart-tab.yazi",
+        "rev": "ccc1d846d80605dec075dea0ed323656940ebcd5",
+        "type": "github"
+      },
+      "original": {
+        "owner": "wekauwau",
+        "repo": "smart-tab.yazi",
+        "type": "github"
       }
     }
   },

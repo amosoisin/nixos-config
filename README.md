@@ -268,7 +268,7 @@ darwin-rebuild switch --flake .#darwin
 | bat | 構文ハイライト付きcat |
 | fzf | ファジーファインダー |
 | zoxide | スマートディレクトリジャンプ |
-| yazi | Rust製高速ファイルマネージャー |
+| yazi | Rust製高速ファイルマネージャー（プラグイン統合：bookmarks, full-border, jump-to-char, smart-enter, smart-filter, smart-tab） |
 | lazygit | Git TUI |
 | tmux | ターミナルマルチプレクサ |
 
@@ -293,6 +293,29 @@ darwin-rebuild switch --flake .#darwin
 - **ウィンドウ分割**: `|`（横）, `-`（縦）
 - **ペイン移動**: `h,j,k,l`（Vimスタイル）
 - **プラグイン**: sensible, yank, resurrect, continuum
+
+### yazi設定
+
+- **ファイルマネージャー**: Rust製の高速ターミナルファイルマネージャー
+- **Zsh統合**: 有効（`yy`でディレクトリジャンプ）
+- **基本機能**: ファイルプレビュー、シンボリックリンク表示、隠しファイル表示
+- **プラグイン**:
+  - **bookmarks.yazi** (dedukun): ブックマーク機能
+    - `m` - 現在位置をブックマーク保存
+    - `'` - ブックマークにジャンプ
+    - `bd` - ブックマーク削除
+    - `bD` - 全ブックマーク削除
+  - **full-border.yazi** (公式): フルボーダー表示（`initLua`で初期化）
+  - **jump-to-char.yazi** (公式): 文字ジャンプ機能
+    - `f` - 指定文字へジャンプ
+  - **smart-enter.yazi** (公式): 賢いEnter動作
+    - `Enter` - ファイルを開く、またはディレクトリに入る
+  - **smart-filter.yazi** (公式): 賢いフィルター機能
+    - `/` - スマートフィルター
+  - **smart-tab.yazi** (wekauwau): タブ作成とディレクトリ移動
+    - `t` - 新しいタブを作成してディレクトリに移動（またはファイルを開く）
+
+**注意**: full-borderプラグインは`plugin.prepend_preloaders`ではなく、`initLua`オプションで初期化する必要があります。詳細は`CLAUDE.md`のトラブルシューティングセクションを参照してください。
 
 ### Neovim設定
 
@@ -369,6 +392,9 @@ fzf
 | NixOS-WSL | release-25.05 | NixOS-WSL環境のみ |
 | nix-darwin | nix-darwin-25.05 | macOS環境のみ |
 | nvim-config | ローカルサブモジュール | `modules/home/neovim/nvim.lua`、元リポジトリ：github:amosoisin/nvim.lua |
+| yazi-plugins | github:yazi-rs/plugins | yazi公式プラグインリポジトリ（full-border, jump-to-char, smart-enter, smart-filter） |
+| yazi-bookmarks | github:dedukun/bookmarks.yazi | yaziブックマークプラグイン |
+| yazi-smart-tab | github:wekauwau/smart-tab.yazi | yaziスマートタブプラグイン |
 
 ## カスタマイズ
 
@@ -499,7 +525,11 @@ git commit -m "fix: pin nvim.lua to specific version"
 
 セットアップ時の問題や一般的なエラーについては、`CLAUDE.md`の「トラブルシューティング」セクションを参照してください。
 
-特にmacOS環境での`/etc/zshenv`エラーについては、詳細な対処方法を記載しています。
+主なトラブルシューティング項目：
+- **macOS**: darwin-rebuild時の`/etc/zshenv`エラー
+- **yazi**: 終了時に「Run preloader 'full-border'」メッセージが表示される問題
+
+各問題の詳細な原因と解決方法は`CLAUDE.md`に記載しています。
 
 ## ライセンス
 

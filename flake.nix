@@ -15,6 +15,23 @@
       url = "git+file:./modules/home/neovim/nvim.lua";
       flake = false;
     };
+
+    # yaziプラグイン（公式リポジトリ）
+    yazi-plugins = {
+      url = "github:yazi-rs/plugins";
+      flake = false;
+    };
+
+    # yaziプラグイン（サードパーティ）
+    yazi-bookmarks = {
+      url = "github:dedukun/bookmarks.yazi";
+      flake = false;
+    };
+
+    yazi-smart-tab = {
+      url = "github:wekauwau/smart-tab.yazi";
+      flake = false;
+    };
   };
 
   outputs = { self, nixpkgs, nixpkgs-unstable, nixos-wsl, home-manager, darwin, ... }@inputs:

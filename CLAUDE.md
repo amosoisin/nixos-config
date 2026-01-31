@@ -48,7 +48,14 @@ nixos-config/
 ## ファイルの役割
 
 ### flake.nix
-- **入力**: nixpkgs, home-manager, nixos-wsl（すべてrelease-25.05）、darwin（nix-darwin、nix-darwin-25.05ブランチ）、nixpkgs-unstable（最新パッケージ用）、nvim-config（ローカルサブモジュール）
+- **入力**:
+  - nixpkgs, home-manager, nixos-wsl（すべてrelease-25.05）
+  - darwin（nix-darwin、nix-darwin-25.05ブランチ）
+  - nixpkgs-unstable（最新パッケージ用）
+  - nvim-config（ローカルサブモジュール）
+  - yazi-plugins（公式プラグインリポジトリ: yazi-rs/plugins）
+  - yazi-bookmarks（dedukun/bookmarks.yazi）
+  - yazi-smart-tab（wekauwau/smart-tab.yazi）
 - **出力**:
   - `nixosConfigurations.nixos`（NixOS-WSL用設定）
   - `darwinConfigurations.darwin`（macOS用設定）
@@ -94,6 +101,14 @@ nixos-config/
   - Zsh統合（`programs.yazi.enableZshIntegration`）
   - Vimライクなキーバインド（h/l で移動、Enter で開く）
   - ファイルプレビュー機能、シンボリックリンク表示
+  - プラグイン統合（bookmarks, full-border, jump-to-char, smart-enter, smart-filter, smart-tab）
+    - **bookmarks.yazi** (dedukun): ブックマーク機能（m で保存、' でジャンプ、bd で削除）
+    - **full-border.yazi** (公式): フルボーダー表示（`initLua`で`require("full-border"):setup()`を呼び出し）
+    - **jump-to-char.yazi** (公式): 文字ジャンプ機能（f キー）
+    - **smart-enter.yazi** (公式): 賢いEnter動作（ファイルを開く、ディレクトリに入る）
+    - **smart-filter.yazi** (公式): 賢いフィルター機能（/ キー）
+    - **smart-tab.yazi** (wekauwau): タブ作成とディレクトリ移動（t キー）
+  - **重要**: full-borderプラグインは`plugin.prepend_preloaders`ではなく、`initLua`オプションで初期化すること（詳細はトラブルシューティング参照）
 
 - **neovim/**: Neovimモジュール設定
   - LSPサーバー（clangd, pyright, bash-language-server等）
@@ -313,3 +328,68 @@ nix-darwinは`/etc`ディレクトリ配下のファイル（`/etc/zshenv`、`/e
 **参考**:
 - [nix-darwin Issue #149](https://github.com/LnL7/nix-darwin/issues/149)
 - [nix-darwin Issue #912](https://github.com/LnL7/nix-darwin/issues/912)
+
+### yazi: 終了時に「Run preloader 'full-border'」メッセージが表示される
+
+**症状**:
+- yaziを終了（`q`キー）する際に、`Run preloader 'full-border'`というメッセージが表示される
+- yaziは正常に終了するが、メッセージが毎回表示されて煩わしい
+- full-borderプラグインが正しく動作していない可能性がある
+
+**原因**:
+full-borderプラグインを`plugin.prepend_preloaders`で設定するのは誤った使用方法です。full-borderプラグインは`init.lua`で`require("full-border"):setup()`を呼び出す必要があります。
+
+**解決方法**:
+
+1. **`modules/home/yazi/default.nix`を編集**:
+
+   **誤った設定（削除する）**:
+   ```nix
+   settings = {
+     # ...
+     plugin = {
+       prepend_preloaders = [
+         { name = "*"; run = "full-border"; }
+       ];
+     };
+   };
+   ```
+
+   **正しい設定（追加する）**:
+   ```nix
+   programs.yazi = {
+     # ...
+     settings = {
+       # mgr, preview等の設定...
+     };
+
+     # initLuaオプションを追加（settingsセクションの外側）
+     initLua = ''
+       require("full-border"):setup()
+     '';
+   };
+   ```
+
+2. **設定を適用**:
+   ```bash
+   sudo nixos-rebuild switch --flake .#nixos
+   # または
+   nrs
+   ```
+
+3. **動作確認**:
+   - yaziを起動し、ウィンドウ全体に角丸のボーダーが表示されることを確認
+   - yaziを終了（`q`キー）時にエラーメッセージが表示されないことを確認
+
+**カスタマイズ（オプション）**:
+ボーダーのスタイルを変更する場合：
+```nix
+initLua = ''
+  require("full-border"):setup({
+    type = ui.Border.PLAIN,  -- シンプルなボーダー
+  })
+'';
+```
+
+**参考**:
+- [yazi-rs/plugins: full-border.yazi](https://github.com/yazi-rs/plugins/tree/main/full-border.yazi)
