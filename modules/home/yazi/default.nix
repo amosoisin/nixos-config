@@ -44,7 +44,30 @@
     };
 
     initLua = ''
-      require("full-border"):setup()
+      require("full-border"):setup {
+        -- Available values: ui.Border.PLAIN, ui.Border.ROUNDED
+        type = ui.Border.ROUNDED,
+      }
+
+      require("bookmarks"):setup({
+        -- 既定は "none"。永続化を有効にする:
+        persist = "all",            -- 推奨："all"（保存・ジャンプ等すべてを永続）
+        -- 必要に応じて表示なども調整
+        desc_format = "parent",
+        custom_desc_input = true,
+        show_keys = true,
+        file_pick_mode = "parent",
+        notify = {
+          enable = false,
+        },
+
+        -- 直前のディレクトリへの戻り（' マーク）を使うなら:
+        last_directory = {
+          enable = true,
+          persist = true,           -- これも永続化したい場合
+          mode = "dir",             -- "dir" | "jump" | "mark"
+        },
+      })
     '';
 
     # キーマップ設定（基本的なVimライクな操作 + プラグイン）
@@ -60,22 +83,22 @@
         # bookmarks.yazi - ブックマーク機能
         {
           on = [ "m" ];
-          run = "plugin bookmarks --args=save";
+          run = "plugin bookmarks save";
           desc = "Save current position as a bookmark";
         }
         {
           on = [ "'" ];
-          run = "plugin bookmarks --args=jump";
+          run = "plugin bookmarks jump";
           desc = "Jump to a bookmark";
         }
         {
           on = [ "b" "d" ];
-          run = "plugin bookmarks --args=delete";
+          run = "plugin bookmarks delete";
           desc = "Delete a bookmark";
         }
         {
           on = [ "b" "D" ];
-          run = "plugin bookmarks --args=delete_all";
+          run = "plugin bookmarks delete_all";
           desc = "Delete all bookmarks";
         }
 
