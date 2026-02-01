@@ -16,8 +16,8 @@
       # 公式プラグイン（yazi-rs/plugins）
       full-border = "${inputs.yazi-plugins}/full-border.yazi";
       jump-to-char = "${inputs.yazi-plugins}/jump-to-char.yazi";
-      smart-enter = "${inputs.yazi-plugins}/smart-enter.yazi";
-      smart-filter = "${inputs.yazi-plugins}/smart-filter.yazi";
+      # smart-enter = "${inputs.yazi-plugins}/smart-enter.yazi";
+      # smart-filter = "${inputs.yazi-plugins}/smart-filter.yazi";
 
       # サードパーティプラグイン
       bookmarks = inputs.yazi-bookmarks;
@@ -87,18 +87,18 @@
         }
 
         # smart-enter.yazi - 賢いEnter動作
-        {
-          on = [ "<Enter>" ];
-          run = "plugin smart-enter";
-          desc = "Smart enter (open file or enter directory)";
-        }
+        # {
+        #   on = [ "<Enter>" ];
+        #   run = "plugin smart-enter";
+        #   desc = "Smart enter (open file or enter directory)";
+        # }
 
         # smart-filter.yazi - 賢いフィルター
-        {
-          on = [ "/" ];
-          run = "plugin smart-filter";
-          desc = "Smart filter";
-        }
+        # {
+        #   on = [ "/" ];
+        #   run = "plugin smart-filter";
+        #   desc = "Smart filter";
+        # }
 
         # smart-tab.yazi - タブ作成とディレクトリ移動
         {
