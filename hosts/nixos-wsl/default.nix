@@ -8,7 +8,11 @@
     useWindowsDriver = true;
 
     wslConf = {
-      automount.options = "metadata,umask=022,fmask=011";
+      automount = {
+        enabled = true;
+        mountFsTab = true;
+        options = "metadata,umask=022,fmask=011";
+      };
     };
 
     interop = {
