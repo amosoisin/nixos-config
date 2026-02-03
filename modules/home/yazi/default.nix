@@ -41,6 +41,44 @@
         max_width = 600;
         max_height = 900;
       };
+
+      opener = {
+        # Enter 相当: 既定の「開く」
+        open = [
+          {
+            run = "wslview $@";
+            desc = "Open";
+            orphan = true;
+            for = "linux";
+          }
+        ];
+
+        # p: メディアを mpv で再生
+        play = [
+          {
+            run = "wslview $@";
+            desc = "Play";
+            orphan = true;
+            for = "linux";
+          }
+        ];
+
+        # R: システムのファイラで選択を表示
+        reveal = [
+          {
+            run = "wslview $@";
+            desc = "Reveal";
+            orphan = true;
+            for = "linux";
+          }
+        ];
+      };
+
+      open = {
+        prepend_rules = [
+          { name = "*.drawio"; use = [ "open" "reveal" ]; }
+        ];
+      };
     };
 
     initLua = ''

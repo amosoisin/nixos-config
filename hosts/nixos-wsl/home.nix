@@ -10,5 +10,6 @@
     nettools
     fping
     iputils
+    wslu
   ];
 }
