@@ -113,6 +113,11 @@
           run = "remove";
           desc = "Trash seleted files";
         }
+        {
+          on = [ "D" "D" ];
+          run = "remove --permanently";
+          desc = "Permanently delete selected files";
+        }
 
         # bookmarks.yazi - ブックマーク機能
         {
