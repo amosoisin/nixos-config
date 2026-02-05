@@ -1,14 +1,10 @@
-{ config, pkgs, lib, inputs, ... }:
+{ config, pkgs, lib, inputs, pkgs-unstable, ... }:
 
 {
-  # ===== yaziパッケージ =====
-  home.packages = with pkgs; [
-    yazi
-  ];
-
   # ===== yazi設定 =====
   programs.yazi = {
     enable = true;
+    package = pkgs-unstable.yazi;  # unstable版を使用
     enableZshIntegration = true;
 
     # ===== プラグイン設定 =====

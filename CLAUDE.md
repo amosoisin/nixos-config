@@ -60,7 +60,7 @@ nixos-config/
   - `nixosConfigurations.nixos`（NixOS-WSL用設定）
   - `darwinConfigurations.darwin`（macOS用設定）
 - 環境ごとの構成を`hosts/`以下から参照
-- `pkgs-unstable`を定義し、最新パッケージが必要なモジュール（claudeなど）に渡す
+- `pkgs-unstable`を定義し、最新パッケージが必要なモジュール（claude、yaziなど）に渡す
 - 各環境用に個別の`pkgs-unstable`を定義（x86_64-linux、aarch64-darwin）
 
 ### modules/system/
@@ -98,6 +98,8 @@ nixos-config/
 
 - **yazi/**: yaziファイルマネージャーモジュール設定
   - Rust製の高速ターミナルファイルマネージャー
+  - nixpkgs-unstableから最新のyaziをインストール（安定版では古いバージョンになる可能性があるため）
+  - `programs.yazi.package`でunstable版を指定（競合を避けるため`home.packages`からは削除）
   - Zsh統合（`programs.yazi.enableZshIntegration`）
   - Vimライクなキーバインド（h/l で移動、Enter で開く）
   - ファイルプレビュー機能、シンボリックリンク表示

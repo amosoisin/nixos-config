@@ -268,7 +268,7 @@ darwin-rebuild switch --flake .#darwin
 | bat | 構文ハイライト付きcat |
 | fzf | ファジーファインダー |
 | zoxide | スマートディレクトリジャンプ |
-| yazi | Rust製高速ファイルマネージャー（プラグイン統合：bookmarks, full-border, jump-to-char, smart-enter, smart-filter, smart-tab） |
+| yazi | Rust製高速ファイルマネージャー（unstable版、プラグイン統合：bookmarks, full-border, jump-to-char, smart-enter, smart-filter, smart-tab） |
 | lazygit | Git TUI |
 | tmux | ターミナルマルチプレクサ |
 
@@ -297,6 +297,7 @@ darwin-rebuild switch --flake .#darwin
 ### yazi設定
 
 - **ファイルマネージャー**: Rust製の高速ターミナルファイルマネージャー
+- **バージョン**: nixpkgs-unstableから最新版をインストール（安定版では古いバージョンになる可能性があるため）
 - **Zsh統合**: 有効（`yy`でディレクトリジャンプ）
 - **基本機能**: ファイルプレビュー、シンボリックリンク表示、隠しファイル表示
 - **プラグイン**:
