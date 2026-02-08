@@ -25,14 +25,10 @@
       continuum
       pain-control
       {
-        plugin = dracula;
+        plugin = catppuccin;
         extraConfig = ''
-          set -g @dracula-plugins "git cwd"
-          set -g @dracula-cpu-usage-colors "pink dark_gray"
-          set -g @dracula-show-flags true
-          set -g @dracula-show-powerline true
-          set -g @dracula-git-show-remote true
-          set -g @dracula-git-show-dirty true
+          set -g @catppuccin_flavor "mocha"
+          set -g @catppuccin_window_status_style "rounded"
         '';
       }
     ];
