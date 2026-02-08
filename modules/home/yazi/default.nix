@@ -168,6 +168,26 @@
           run = "plugin smart-tab";
           desc = "Create a new tab and enter the directory or open file";
         }
+
+        # カスタム設定
+        # lazygitを呼び出す
+        {
+          on = [ "g" "i" ];
+          run = "shell --block lazygit";
+          desc = "Run lazygit";
+        }
+        {
+          on = [ "g" "I" ];
+          run = "shell --block lazygit.exe";
+          desc = "Run lazygit.exe (Windows)";
+        }
+
+        # 現在ディレクトリをエクスプローラーで開く
+        {
+          on = [ "e" "c" ];
+          run = "shell wslview .";
+          desc = "Open current Directory as Explorer";
+        }
       ];
     };
   };
