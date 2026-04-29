@@ -43,6 +43,9 @@
       # 開始・終了を別キーに登録
       bind a set-window-option synchronize-panes on
       bind b set-window-option synchronize-panes off
+
+      # ==== ポップアップウインドウ ====
+      bind P display-popup -E -d "#{pane_current_path}" "zsh"
     '';
   };
 }
