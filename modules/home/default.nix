@@ -8,6 +8,7 @@
     (import ./yazi { inherit config pkgs lib inputs pkgs-unstable; })
     (import ./neovim { inherit config pkgs lib inputs; })
     (import ./claude { inherit pkgs-unstable; })
+    ./starship
   ];
 
   home.packages = with pkgs; [
