@@ -28,10 +28,6 @@
           echo ""
       fi
 
-      # tmux自動起動（tmux内でない場合のみ）
-      if command -v tmux &> /dev/null && [ -z "$TMUX" ] && [ -t 1 ]; then
-          tmux attach >/dev/null 2>&1 || tmux new -A -s dev
-      fi
     '';
 
     plugins = [
@@ -64,6 +60,11 @@
         name = "zsh-syntax-highlighting";
         src = pkgs.zsh-syntax-highlighting;
         file = "share/zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.plugin.zsh";
+      }
+      {
+        name = "tmux";
+        src = ./.;
+        file = "tmux.zsh";
       }
     ];
   };
