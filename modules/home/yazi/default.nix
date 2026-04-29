@@ -23,7 +23,7 @@
     settings = {
       mgr = {
         # ファイルマネージャーの表示設定
-        show_hidden = true;
+        show_hidden = false;
         show_symlink = true;
         sort_by = "natural";
         sort_sensitive = false;
@@ -72,7 +72,7 @@
 
       open = {
         prepend_rules = [
-          { name = "*.drawio"; use = [ "open" "reveal" ]; }
+          { url = "*.drawio"; use = [ "open" "reveal" ]; }
         ];
       };
     };
@@ -172,12 +172,12 @@
         # カスタム設定
         # lazygitを呼び出す
         {
-          on = [ "g" "i" ];
+          on = [ "g" "i" "l" ];
           run = "shell --block lazygit";
           desc = "Run lazygit";
         }
         {
-          on = [ "g" "I" ];
+          on = [ "g" "i" "w" ];
           run = "shell --block lazygit.exe";
           desc = "Run lazygit.exe (Windows)";
         }
@@ -185,7 +185,7 @@
         # 現在ディレクトリをエクスプローラーで開く
         {
           on = [ "e" "c" ];
-          run = "shell wslview .";
+          run = "shell --orphan \"explorer.exe .\"";
           desc = "Open current Directory as Explorer";
         }
       ];
