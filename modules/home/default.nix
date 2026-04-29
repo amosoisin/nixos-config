@@ -66,8 +66,11 @@
     # ===== その他 =====
     tmux
     squashfsTools
+    zip
+    trash-cli
+    openssl
 
-    obsidian
+    btop
   ];
 
   home.stateVersion = "25.05";
