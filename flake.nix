@@ -10,6 +10,7 @@
         system = "x86_64-linux";
         modules = [
           ./configuration.nix
+          ./network.nix
           nixos-wsl.nixosModules.default
           {
             system.stateVersion = "26.05";
