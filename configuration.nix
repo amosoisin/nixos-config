@@ -32,15 +32,20 @@
     shell = pkgs.zsh;
   };
 
-  environment.systemPackages = with pkgs;[
-    git
-    neovim
-    wget
-    zsh
-    docker
-  ];
-
   programs.zsh = {
     enable = true;
+    # ohMyZsh設定はhome-managerで管理
   };
+
+  # Nix実験的機能の有効化
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
+  # タイムゾーン設定
+  time.timeZone = "Asia/Tokyo";
+
+  # ロケール設定
+  i18n.defaultLocale = "ja_JP.UTF-8";
+
+  # Docker有効化
+  virtualisation.docker.enable = true;
 }
