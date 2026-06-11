@@ -25,9 +25,22 @@
     };
   };
 
+  # ===== ユーザー定義 =====
+  users.users.nixos = {
+    isNormalUser = true;
+    extraGroups = [ "docker" ];
+    shell = pkgs.zsh;
+  };
+
   environment.systemPackages = with pkgs;[
     git
     neovim
     wget
+    zsh
+    docker
   ];
+
+  programs.zsh = {
+    enable = true;
+  };
 }
