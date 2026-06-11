@@ -5,9 +5,24 @@
 { config, lib, pkgs, ... }:
 
 {
+  # WSL用設定
   wsl = {
     enable = true;
     defaultUser = "nixos";
+    useWindowsDriver = true;
+
+    wslConf = {
+      automount = {
+        enabled = true;
+        mountFsTab = true;
+        options = "metadata,umask=022,fmask=011";
+      };
+    };
+
+    interop = {
+      register = true;
+      includePath = true;
+    };
   };
 
   environment.systemPackages = with pkgs;[
