@@ -6,9 +6,15 @@
     # home-manager
     home-manager.url = "github:nix-community/home-manager/release-26.05";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
+
+    # NixVim
+    nixvim = {
+      url = "github:nix-community/nixvim/nixos-26.05";
+      inputs.nixvim.inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, nixos-wsl, home-manager, ... }: {
+  outputs = { self, nixpkgs, nixos-wsl, home-manager, nixvim, ... }: {
     nixosConfigurations = {
       nixos = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
@@ -28,7 +34,12 @@
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
 
-            home-manager.users.nixos = import ./home/default.nix;
+            home-manager.users.nixos = {
+              imports = [
+                ./home/default.nix
+                nixvim.homeModules.nixvim
+              ];
+            };
           }
         ];
       };

@@ -8,12 +8,10 @@
     ./yazi
     ./claude
     ./starship
+    ./nixvim
   ];
 
   home.packages = with pkgs; [
-    # ===== エディタ =====
-    vim
-
     # ===== ビルドツール =====
     cmake
     gnumake
