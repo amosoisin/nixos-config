@@ -48,4 +48,7 @@
 
   # Docker有効化
   virtualisation.docker.enable = true;
+
+  # Unfreeパッケージ許可
+  nixpkgs.config.allowUnfree = true;
 }

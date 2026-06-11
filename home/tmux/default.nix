@@ -1,0 +1,51 @@
+{ config, pkgs, lib, ... }:
+
+{
+  # ===== tmux設定 =====
+  programs.tmux = {
+    enable = true;
+    shell = "${pkgs.zsh}/bin/zsh";
+    shortcut = "b";
+    terminal = "tmux-256color";
+    keyMode = "vi";
+    baseIndex = 1;
+    mouse = true;
+    escapeTime = 0;
+    newSession = true;
+    historyLimit = 50000;
+
+    # Force tmux to use /tmp for sockets (WSL2 compat)
+    secureSocket = false;
+
+    # plugins
+    plugins = with pkgs.tmuxPlugins; [
+      sensible
+      yank
+      resurrect
+      continuum
+      pain-control
+      {
+        plugin = catppuccin;
+        extraConfig = ''
+          set -g @catppuccin_flavor "mocha"
+          set -g @catppuccin_window_status_style "rounded"
+        '';
+      }
+    ];
+    extraConfig = ''
+      # ===== 色設定 =====
+      set -g terminal-overrides 'xterm:colors=256'
+      set-option -ga terminal-overrides ',xterm-256color:Tc'
+
+      # ===== シンクロペイン =====
+      # トグル
+      bind S set-window-option synchronize-panes
+      # 開始・終了を別キーに登録
+      bind a set-window-option synchronize-panes on
+      bind b set-window-option synchronize-panes off
+
+      # ==== ポップアップウインドウ ====
+      bind P display-popup -E -d "#{pane_current_path}" "zsh"
+    '';
+  };
+}
