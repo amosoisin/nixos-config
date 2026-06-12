@@ -113,6 +113,13 @@
         action = "<Cmd>bnext<CR>";
         options = { noremap = true; silent = true; };
       }
+
+
+      {
+        mode = "i";
+        key = "<C-l>";
+        action = "<cmd>lua require('in-and-out').in_and_out()<CR>";
+      }
     ];
 
     plugins.lualine.enable = true;
@@ -128,5 +135,168 @@
         command = "setfiletype html",
       })
     '';
+
+    colorschemes = {
+      catppuccin = {
+        enable = true;
+
+        settings = {
+          flavour = "macchiato";
+        };
+      };
+    };
+
+    plugins = {
+      lsp = {
+        enable = true;
+        keymaps = {
+          diagnostic = {
+            "gK" = "open_float";
+          };
+          lspBuf = {
+            "K" = "hover";
+            "gd" = "definition";
+            "gn" = "rename";
+            "ga" = "code_action";
+
+            "gr" = "references";
+
+          };
+        };
+
+        servers = {
+          clangd = { enable = true; };
+          bashls = { enable = true; };
+          autotools_ls = { enable = true; };
+          docker_language_server = { enable = true; };
+          luals = { enable = true; };
+          pyright = { enable = true; };
+          rust_analyzer = { enable = true; };
+          ts_ls = { enable = true; };
+        };
+      };
+
+      cmp = {
+        enable = true;
+        settings = {
+          sources = [
+            {
+              name = "nvim_lsp";
+
+              priority = 1000;
+            }
+          ];
+          mapping = {
+            "<Tab>" = "cmp.mapping(cmp.mapping.select_next_item(),{'i', 's'})";
+            "<S-Tab>" = "cmp.mapping(cmp.mapping.select_prev_item(),{'i', 's'})";
+            "<CR>" = "cmp.mapping.confirm({ select = true })";
+          };
+        };
+      };
+
+      telescope = {
+        enable = true;
+        settings = {
+          defaults = {
+            file_ignore_patterns = [
+              # .gitディレクトリを除外
+              "^.git/"
+            ];
+          };
+          pickers = {
+            find_files = {
+              # 隠しファイルを表示する
+              hidden = true;
+            };
+          };
+        };
+
+        keymaps = {
+          "<leader>fw" = {
+            action = "live_grep";
+          };
+          "<leader>ff" = {
+            action = "find_files";
+          };
+          "<leader>fr" = {
+            action = "oldfiles";
+          };
+          "<leader>fb" = {
+            action = "buffers";
+          };
+          "<leader>fh" = {
+            action = "help_tags";
+          };
+        };
+      };
+
+      # ぱんくずリスト
+      barbecue = { enable = true; };
+
+      # 自動括弧
+      nvim-autopairs = { enable = true; };
+
+      # 括弧、タグの編集
+      nvim-surround = {
+        enable = true;
+        # settings = {
+        #   keymaps =   {
+        #     insert = "<C-g>s";
+        #     insert_line = "<C-g>S";
+        #     normal = "ys";
+        #     normal_cur = "yss";
+        #     normal_line = "yS";
+        #     normal_cur_line = "ySS";
+        #     visual = "S";
+        #     visual_line = "gS";
+        #     delete = "ds";
+        #     change = "cs";
+        #     change_line = "cS";
+        #   };
+        # };
+      };
+
+      # Git
+      gitsigns = { enable = true; };
+
+      # key
+      which-key = { enable = true; };
+
+      # ファイラ
+      neo-tree = { enable = true; };
+
+      # インデントを推測
+      guess-indent = { enable = true; };
+
+      indent-blankline = { enable = true; };
+
+      # ポップアップ通知
+      noice = { enable = true; };
+
+      incline = { enable = true; };
+
+      marks = { enable = true; };
+      # Unfree
+      # eyeliner = { enable = true; };
+
+      rainbow-delimiters = { enable = true; };
+
+      bufferline = { enable = true; };
+      neoscroll = { enable = true; };
+      hardtime = { enable = true; };
+      better-escape = { enable = true; };
+      render-markdown = { enable = true; };
+    };
+
+    extraPlugins = [(pkgs.vimUtils.buildVimPlugin {
+      name = "in-and-out";
+      src = pkgs.fetchFromGitHub {
+        owner = "ysmb-wtsg";
+        repo = "in-and-out.nvim";
+        rev = "03456b9c49365a28732378a7f2a72a613154e042"; # 最新のコミットハッシュを指定(tagが張ってあればtagでも指定可能)
+        #hash = pkgs.lib.fakeHash; # fakeHashを生成
+        hash = "sha256-QPEvWOTKzscUs+vHQ0LJ/BNBd9buMgG/jkmjg7JlhT8=";
+      };
+    })];
   };
 }
