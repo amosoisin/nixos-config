@@ -171,7 +171,11 @@
           docker_language_server = { enable = true; };
           luals = { enable = true; };
           pyright = { enable = true; };
-          rust_analyzer = { enable = true; };
+          rust_analyzer = {
+            enable = true;
+            installRustc = true;
+            installCargo = true;
+          };
           ts_ls = { enable = true; };
         };
       };
@@ -276,7 +280,6 @@
       incline = { enable = true; };
 
       marks = { enable = true; };
-      # Unfree
       # eyeliner = { enable = true; };
 
       rainbow-delimiters = { enable = true; };
@@ -286,6 +289,10 @@
       hardtime = { enable = true; };
       better-escape = { enable = true; };
       render-markdown = { enable = true; };
+
+      # depends
+      web-devicons = { enable = true; };
+      treesitter = { enable = true; };
     };
 
     extraPlugins = [(pkgs.vimUtils.buildVimPlugin {
