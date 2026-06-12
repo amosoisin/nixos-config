@@ -70,6 +70,9 @@
     trash-cli
     openssl
     btop
+
+    # ==== WSL関連 ====
+    wsl-open
   ];
 
   home.stateVersion = "25.11";

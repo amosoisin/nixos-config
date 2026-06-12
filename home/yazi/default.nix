@@ -42,7 +42,7 @@
         # Enter 相当: 既定の「開く」
         open = [
           {
-            run = "wslview $@";
+            run = "wsl-open \"$@\"";
             desc = "Open";
             orphan = true;
             for = "linux";
@@ -52,7 +52,7 @@
         # p: メディアを mpv で再生
         play = [
           {
-            run = "wslview $@";
+            run = "wsl-open \"$@\"";
             desc = "Play";
             orphan = true;
             for = "linux";
@@ -62,7 +62,7 @@
         # R: システムのファイラで選択を表示
         reveal = [
           {
-            run = "wslview $@";
+            run = "wsl-open \"$@\"";
             desc = "Reveal";
             orphan = true;
             for = "linux";
