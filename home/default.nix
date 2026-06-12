@@ -55,6 +55,9 @@
     gnupg
     universal-ctags
     shellcheck
+    iputils
+    fping
+    nettools
 
     # ===== Git関連 =====
     gh
@@ -66,7 +69,6 @@
     zip
     trash-cli
     openssl
-
     btop
   ];
 
