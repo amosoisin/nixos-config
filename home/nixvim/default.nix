@@ -217,7 +217,7 @@
         };
 
         keymaps = {
-          "<leader>fw" = {
+          "<leader>fg" = {
             action = "live_grep";
           };
           "<leader>ff" = {
