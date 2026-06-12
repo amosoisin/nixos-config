@@ -1,11 +1,11 @@
-{ config, pkgs, lib, ...}:
+{ config, pkgs, lib, inputs, ...}:
 
 {
   imports = [
     ./git
     ./zsh
     ./tmux
-    ./yazi
+    (import ./yazi { inherit config pkgs lib inputs; })
     ./claude
     ./starship
     ./nixvim

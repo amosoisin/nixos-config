@@ -12,9 +12,21 @@
       url = "github:nix-community/nixvim/nixos-26.05";
       inputs.nixvim.inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # yaziプラグイン（公式リポジトリ）
+    yazi-plugins = {
+      url = "github:yazi-rs/plugins";
+      flake = false;
+    };
+
+    # yaziプラグイン（サードパーティ）
+    yazi-bookmarks = {
+      url = "github:dedukun/bookmarks.yazi";
+      flake = false;
+    };
   };
 
-  outputs = { self, nixpkgs, nixos-wsl, home-manager, nixvim, ... }: {
+  outputs = { self, nixpkgs, nixos-wsl, home-manager, nixvim, ... }@inputs: {
     nixosConfigurations = {
       nixos = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
@@ -34,6 +46,7 @@
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
 
+            home-manager.extraSpecialArgs = { inherit inputs; };
             home-manager.users.nixos = {
               imports = [
                 ./home/default.nix

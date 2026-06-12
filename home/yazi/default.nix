@@ -8,19 +8,17 @@
     shellWrapperName = "y";
 
     # ===== プラグイン設定 =====
-    # plugins = {
-    #   # 公式プラグイン（yazi-rs/plugins）
-    #   # ボーダー表示
-    #   full-border = "${inputs.yazi-plugins}/full-border.yazi";
-    #   # smart-enter (ファイルならopen、ディレクトリなら移動する)
-    #   smart-enter = "${inputs.yazi-plugins}/smart-enter.yazi";
-    #   # git = "${inputs.yazi-plugins}/git.yazi";
+    plugins = {
+      # 公式プラグイン（yazi-rs/plugins）
+      # ボーダー表示
+      full-border = "${inputs.yazi-plugins}/full-border.yazi";
+      # smart-enter (ファイルならopen、ディレクトリなら移動する)
+      smart-enter = "${inputs.yazi-plugins}/smart-enter.yazi";
 
-
-    #   # サードパーティプラグイン
-    #   # ブックマークプラグイン
-    #   bookmarks = inputs.yazi-bookmarks;
-    # };
+      # サードパーティプラグイン
+      # ブックマークプラグイン
+      bookmarks = inputs.yazi-bookmarks;
+    };
 
     settings = {
       mgr = {
@@ -79,32 +77,32 @@
       };
     };
 
-    # initLua = ''
-    #   require("full-border"):setup {
-    #     -- Available values: ui.Border.PLAIN, ui.Border.ROUNDED
-    #     type = ui.Border.ROUNDED,
-    #   }
+    initLua = ''
+      require("full-border"):setup {
+        -- Available values: ui.Border.PLAIN, ui.Border.ROUNDED
+        type = ui.Border.ROUNDED,
+      }
 
-    #   require("bookmarks"):setup({
-    #     -- 既定は "none"。永続化を有効にする:
-    #     persist = "all",            -- 推奨："all"（保存・ジャンプ等すべてを永続）
-    #     -- 必要に応じて表示なども調整
-    #     desc_format = "parent",
-    #     custom_desc_input = true,
-    #     show_keys = true,
-    #     file_pick_mode = "parent",
-    #     notify = {
-    #       enable = false,
-    #     },
+      require("bookmarks"):setup({
+        -- 既定は "none"。永続化を有効にする:
+        persist = "all",            -- 推奨："all"（保存・ジャンプ等すべてを永続）
+        -- 必要に応じて表示なども調整
+        desc_format = "parent",
+        custom_desc_input = true,
+        show_keys = true,
+        file_pick_mode = "parent",
+        notify = {
+          enable = false,
+        },
 
-    #     -- 直前のディレクトリへの戻り（' マーク）を使うなら:
-    #     last_directory = {
-    #       enable = true,
-    #       persist = true,           -- これも永続化したい場合
-    #       mode = "dir",             -- "dir" | "jump" | "mark"
-    #     },
-    #   })
-    # '';
+        -- 直前のディレクトリへの戻り（' マーク）を使うなら:
+        last_directory = {
+          enable = true,
+          persist = true,           -- これも永続化したい場合
+          mode = "dir",             -- "dir" | "jump" | "mark"
+        },
+      })
+    '';
 
     # キーマップ設定（基本的なVimライクな操作 + プラグイン）
     keymap = {
