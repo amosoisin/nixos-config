@@ -33,6 +33,7 @@
         modules = [
           ./configuration.nix
           ./network.nix
+          ./mount.nix
           nixos-wsl.nixosModules.default
           {
             system.stateVersion = "26.05";
