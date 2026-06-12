@@ -4,6 +4,7 @@
   programs.nixvim = {
     enable = true;
     vimAlias = true;
+    defaultEditor = true;
 
     globals = {
       mapleader = " ";
