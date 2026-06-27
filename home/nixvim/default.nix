@@ -132,8 +132,45 @@
       -- ファイルタイプ設定の自動コマンド
       vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
         pattern = "*.htm",
-
         command = "setfiletype html",
+      })
+
+      -- tabset.nvim: ファイルタイプごとのタブ設定（guess-indentが既存ファイルを上書き）
+      require("tabset").setup({
+        defaults = {
+          tabwidth = 4,
+          expandtab = true,
+        },
+        languages = {
+          {
+            filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "html", "css", "scss" },
+            config = {
+              tabwidth = 2,
+              expandtab = true,
+            },
+          },
+          {
+            filetypes = { "lua", "nix" },
+            config = {
+              tabwidth = 2,
+              expandtab = true,
+            },
+          },
+          {
+            filetypes = { "go" },
+            config = {
+              tabwidth = 4,
+              expandtab = false,
+            },
+          },
+          {
+            filetypes = { "python", "rust", "c", "cpp" },
+            config = {
+              tabwidth = 4,
+              expandtab = true,
+            },
+          },
+        },
       })
     '';
 
@@ -307,15 +344,25 @@
       treesitter = { enable = true; };
     };
 
-    extraPlugins = [(pkgs.vimUtils.buildVimPlugin {
-      name = "in-and-out";
-      src = pkgs.fetchFromGitHub {
-        owner = "ysmb-wtsg";
-        repo = "in-and-out.nvim";
-        rev = "03456b9c49365a28732378a7f2a72a613154e042"; # 最新のコミットハッシュを指定(tagが張ってあればtagでも指定可能)
-        #hash = pkgs.lib.fakeHash; # fakeHashを生成
-        hash = "sha256-QPEvWOTKzscUs+vHQ0LJ/BNBd9buMgG/jkmjg7JlhT8=";
-      };
-    })];
+    extraPlugins = [
+      (pkgs.vimUtils.buildVimPlugin {
+        name = "in-and-out";
+        src = pkgs.fetchFromGitHub {
+          owner = "ysmb-wtsg";
+          repo = "in-and-out.nvim";
+          rev = "03456b9c49365a28732378a7f2a72a613154e042";
+          hash = "sha256-QPEvWOTKzscUs+vHQ0LJ/BNBd9buMgG/jkmjg7JlhT8=";
+        };
+      })
+      (pkgs.vimUtils.buildVimPlugin {
+        name = "tabset-nvim";
+        src = pkgs.fetchFromGitHub {
+          owner = "FotiadisM";
+          repo = "tabset.nvim";
+          rev = "996f95e4105d053a163437e19a40bd2ea10abeb2";
+          hash = "sha256-kOLN74p5AvZlmZRd2hT5c1uV7qziVcyIB8fpC1RiDPk=";
+        };
+      })
+    ];
   };
 }
