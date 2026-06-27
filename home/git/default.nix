@@ -15,6 +15,10 @@
         quotepath = false;
       };
 
+      crendential = {
+        helper =  "store";
+      };
+
       interactive = {
         diffFilter = "delta --color-only";
       };
