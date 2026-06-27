@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git ls-remote *)",
+      "Bash(nix-prefetch-github FotiadisM tabset.nvim --rev 996f95e4105d053a163437e19a40bd2ea10abeb2)",
+      "Bash(nix store *)",
+      "Bash(nix-prefetch-url *)",
+      "Bash(nix hash *)",
+      "Bash(nix flake *)",
+      "Bash(sudo nixos-rebuild switch --flake /home/nixos/nixos#nixos)"
+    ]
+  }
+}
