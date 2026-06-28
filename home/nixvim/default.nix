@@ -164,10 +164,17 @@
             },
           },
           {
-            filetypes = { "python", "rust", "c", "cpp" },
+            filetypes = { "python", "rust" },
             config = {
               tabwidth = 4,
               expandtab = true,
+            },
+          },
+          {
+            filetypes = { "c", "cpp" },
+            config = {
+              tabwidth = 8,
+              expandtab = false,
             },
           },
         },
