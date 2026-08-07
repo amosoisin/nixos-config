@@ -45,7 +45,8 @@
       bind b set-window-option synchronize-panes off
 
       # ==== ポップアップウインドウ ====
-      bind P display-popup -E -d "#{pane_current_path}" "zsh"
+      bind P display-popup -E -h 95% -w 95% -d "#{pane_current_path}" "zsh"
+      bind L display-popup -E -h 95% -w 95% -d "#{pane_current_path}" "pwd -P | grep -q /mnt/c && lazygit.exe || lazygit"
     '';
   };
 }
