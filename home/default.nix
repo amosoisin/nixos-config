@@ -75,7 +75,7 @@
     wsl-open
   ];
 
-  home.stateVersion = "25.11";
+  home.stateVersion = "26.05";
   programs.home-manager.enable = true;
 
   # ===== 環境変数 =====
