@@ -153,7 +153,7 @@
         "nixos-wsl": "nixos-wsl",
         "nixpkgs": "nixpkgs_2",
         "nixvim": "nixvim",
-        "yazi-bookmarks": "yazi-bookmarks",
+        "yamb-yazi": "yamb-yazi",
         "yazi-plugins": "yazi-plugins"
       }
     },
@@ -172,19 +172,19 @@
         "type": "github"
       }
     },
-    "yazi-bookmarks": {
+    "yamb-yazi": {
       "flake": false,
       "locked": {
-        "lastModified": 1752096289,
-        "narHash": "sha256-GQFBRB2aQqmmuKZ0BpcCAC4r0JFKqIANZNhUC98SlwY=",
-        "owner": "dedukun",
-        "repo": "bookmarks.yazi",
-        "rev": "9ef1254d8afe88aba21cd56a186f4485dd532ab8",
+        "lastModified": 1784373818,
+        "narHash": "sha256-oq9zyVduKbOPuJVzFHiNIxe/JvNcqujS5edEjZJstpQ=",
+        "owner": "h-hg",
+        "repo": "yamb.yazi",
+        "rev": "5576bd790e6868019d3ce7e958873cee3c94d783",
         "type": "github"
       },
       "original": {
-        "owner": "dedukun",
-        "repo": "bookmarks.yazi",
+        "owner": "h-hg",
+        "repo": "yamb.yazi",
         "type": "github"
       }
     },

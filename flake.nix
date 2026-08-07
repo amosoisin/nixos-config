@@ -20,8 +20,8 @@
     };
 
     # yaziプラグイン（サードパーティ）
-    yazi-bookmarks = {
-      url = "github:dedukun/bookmarks.yazi";
+    yamb-yazi = {
+      url = "github:h-hg/yamb.yazi";
       flake = false;
     };
   };

@@ -17,7 +17,7 @@
 
       # サードパーティプラグイン
       # ブックマークプラグイン
-      bookmarks = inputs.yazi-bookmarks;
+      yamb = "${inputs.yamb-yazi}";
     };
 
     settings = {
@@ -83,25 +83,24 @@
         type = ui.Border.ROUNDED,
       }
 
-      require("bookmarks"):setup({
-        -- 既定は "none"。永続化を有効にする:
-        persist = "all",            -- 推奨："all"（保存・ジャンプ等すべてを永続）
-        -- 必要に応じて表示なども調整
-        desc_format = "parent",
-        custom_desc_input = true,
-        show_keys = true,
-        file_pick_mode = "parent",
-        notify = {
-          enable = false,
-        },
+      -- yamb.yazi
+      -- You can configure your bookmarks by lua language
+      local bookmarks = {}
 
-        -- 直前のディレクトリへの戻り（' マーク）を使うなら:
-        last_directory = {
-          enable = true,
-          persist = true,           -- これも永続化したい場合
-          mode = "dir",             -- "dir" | "jump" | "mark"
-        },
-      })
+      require("yamb"):setup {
+        -- Optional, the path ending with path seperator represents folder.
+        bookmarks = bookmarks,
+        -- Optional, recieve notification everytime you jump.
+        jump_notify = true,
+        -- Optional, the cli of fzf.
+        cli = "fzf",
+        -- Optional, a string used for randomly generating keys, where the preceding characters have higher priority.
+
+        keys = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ",
+        -- Optional, the path of bookmarks
+        path = (ya.target_family() == "windows" and os.getenv("APPDATA") .. "\\yazi\\config\\bookmark") or
+              (os.getenv("HOME") .. "/.config/yazi/bookmark"),
+      }
     '';
 
     # キーマップ設定（基本的なVimライクな操作 + プラグイン）
@@ -119,26 +118,47 @@
           desc = "Permanently delete selected files";
         }
 
-        # bookmarks.yazi - ブックマーク機能
+        # yamb.yazi - ブックマーク機能
         {
-          on = [ "m" ];
-          run = "plugin bookmarks save";
-          desc = "Save current position as a bookmark";
+          on = [ "u" "a" ];
+          run = "plugin yamb -- save";
+          desc = "Add bookmark";
         }
         {
-          on = [ "'" ];
-          run = "plugin bookmarks jump";
-          desc = "Jump to a bookmark";
+          # on = [ "u" "g" ];
+          on = [ ";" ];
+          run = "plugin yamb -- jump_by_key";
+          desc = "Jump bookmark by key";
         }
         {
-          on = [ "b" "d" ];
-          run = "plugin bookmarks delete";
-          desc = "Delete a bookmark";
+          on = [ "u" "G" ];
+          run = "plugin yamb -- jump_by_fzf";
+          desc = "Jump bookmark by fzf";
         }
         {
-          on = [ "b" "D" ];
-          run = "plugin bookmarks delete_all";
-          desc = "Delete all bookmarks";
+          on = [ "u" "d" ];
+          run = "plugin yamb -- delete_by_key";
+          desc = "Delete bookmark by key";
+        }
+        # {
+        #   on = [ "u" "D" ];
+        #   run = "plugin yamb -- delete_by_fzf";
+        #   desc = "Delete bookmark by fzf";
+        # }
+        # {
+        #   on = [ "u" "A" ];
+        #   run = "plugin yamb -- delete_all";
+        #   desc = "Delete all bookmarks";
+        # }
+        {
+          on = [ "u" "r" ];
+          run = "plugin yamb -- rename_by_key";
+          desc = "Rename bookmark by key";
+        }
+        {
+          on = [ "u" "R" ];
+          run = "plugin yamb -- rename_by_fzf";
+          desc = "Rename bookmark by fzf";
         }
 
         # smart-enter.yazi - 賢いEnter動作
@@ -149,18 +169,6 @@
         }
 
         # カスタム設定
-        # lazygitを呼び出す
-        {
-          on = [ "g" "i" "l" ];
-          run = "shell --block lazygit";
-          desc = "Run lazygit";
-        }
-        {
-          on = [ "g" "i" "w" ];
-          run = "shell --block lazygit.exe";
-          desc = "Run lazygit.exe (Windows)";
-        }
-
         # 現在ディレクトリをエクスプローラーで開く
         {
           on = [ "e" "c" ];
