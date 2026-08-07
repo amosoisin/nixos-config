@@ -135,7 +135,6 @@
         command = "setfiletype html",
       })
 
-      -- tabset.nvim: ファイルタイプごとのタブ設定（guess-indentが既存ファイルを上書き）
       require("tabset").setup({
         defaults = {
           tabwidth = 4,
@@ -172,6 +171,13 @@
           },
           {
             filetypes = { "c", "cpp" },
+            config = {
+              tabwidth = 8,
+              expandtab = false,
+            },
+          },
+          {
+            filetypes = { "make" },
             config = {
               tabwidth = 8,
               expandtab = false,
