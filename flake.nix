@@ -3,6 +3,11 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
     nixos-wsl.url = "github:nix-community/NixOS-WSL/release-26.05";
 
+    agenix = {
+      url = "github:ryantm/agenix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # home-manager
     home-manager.url = "github:nix-community/home-manager/release-26.05";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
@@ -26,7 +31,7 @@
     };
   };
 
-  outputs = { self, nixpkgs, nixos-wsl, home-manager, nixvim, ... }@inputs: {
+  outputs = { self, nixpkgs, nixos-wsl, home-manager, nixvim, agenix, ... }@inputs: {
     nixosConfigurations = {
       nixos = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
@@ -34,6 +39,14 @@
           ./configuration.nix
           ./network.nix
           ./mount.nix
+
+          agenix.nixosModules.default
+          {
+            environment.systemPackages = [
+              agenix.packages.x86_64-linux.default
+            ];
+          }
+
           nixos-wsl.nixosModules.default
           {
             system.stateVersion = "26.05";
