@@ -6,7 +6,6 @@
     ./zsh
     ./tmux
     (import ./yazi { inherit config pkgs lib inputs; })
-    ./claude
     ./starship
     ./nixvim
   ];
@@ -70,6 +69,7 @@
     trash-cli
     openssl
     btop
+    claude-code
 
     # ==== WSL関連 ====
     wsl-open
