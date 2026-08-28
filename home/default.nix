@@ -70,6 +70,7 @@
     openssl
     btop
     claude-code
+    direnv
 
     # ==== WSL関連 ====
     wsl-open
@@ -109,5 +110,11 @@
     enable = true;
     enableZshIntegration = true;
     icons = "auto";
+  };
+
+  programs.direnv = {
+    enable = true;
+    enableZshIntegration = true;
+    nix-direnv.enable = true;
   };
 }
