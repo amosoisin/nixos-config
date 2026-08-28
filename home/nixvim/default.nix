@@ -282,6 +282,9 @@
           "<leader>fh" = {
             action = "help_tags";
           };
+          "<leader>fd" = {
+            action = "diagnostics";
+          };
         };
       };
 
